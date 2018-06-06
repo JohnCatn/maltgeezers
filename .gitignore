@@ -42,3 +42,6 @@ maltgeezers.log*
 # env config
 .env
 development.cfg
+
+# css stylesheets as we use scss
+.css

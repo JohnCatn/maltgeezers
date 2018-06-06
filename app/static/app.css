@@ -1,33 +1,28 @@
 body {
   padding-top: 54px; }
 
-  @media (min-width: 992px) {
-    body {
-      padding-top: 56px;   }
-}
+  body {
+    font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
 
-body {
-  font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
+    header {
+      padding-top: 2rem;
+      padding-bottom: 2rem; }
 
-  header {
-    padding-top: 2rem;
-    padding-bottom: 2rem; }
-
-    .btn-review {
-      position: relative;
-      top: 0;
-      margin-top: 50%;
-      opacity: 0;
-      font-size: 1rem;
-      color: #fff;
-      border-radius: 1.84211rem;
-      transform: translateY(-50%);
-      left: 20%;
-      transition: all 0.25s ease-in-out; }
-      .btn-review:focus, .btn-review:hover {
-        color: #111;
-        background-color: #fff;
-        border-color: #fff; }
+      .btn-review {
+        position: relative;
+        top: 0;
+        margin-top: 50%;
+        opacity: 0;
+        font-size: 1rem;
+        color: #fff;
+        border-radius: 1.84211rem;
+        transform: translateY(-50%);
+        left: 20%;
+        transition: all 0.25s ease-in-out; }
+        .btn-review:focus, .btn-review:hover {
+          color: #111;
+          background-color: #fff;
+          border-color: #fff; }
 
 .item__overlay {
   position: absolute;
@@ -59,27 +54,46 @@ body {
 
     .grid__sizer, .grid__item {
       position: relative;
-      width: 18%; }
+      width: 80%; }
 
       .grid__item {
         margin-bottom: 0.9375rem;
         border-radius: 0.21053rem;
         overflow: hidden; }
 
-        .grid__item--high, .grid__item--high img {
-          height: 25.26316rem; }
+        img {
+          width: 100%;
+          max-width: 100%;
+          height: auto; }
 
-          img {
-            width: 100%;
-            max-width: 100%;
-            height: auto; }
-
-            a, .fa {
-              color: #bbb;
-              transition: color 0.25s ease-in-out; }
-              a:focus, a:hover, .fa:focus, .fa:hover {
-                text-decoration: none;
-                color: #666; }
+          a, .fa {
+            color: #bbb;
+            transition: color 0.25s ease-in-out; }
+            a:focus, a:hover, .fa:focus, .fa:hover {
+              text-decoration: none;
+              color: #666; }
 
 .active .fa {
   color: #f62459; }
+
+  @media (min-width: 544px) {
+    .grid__sizer, .grid__item {
+      position: relative;
+      width: 100%;   }
+}
+
+@media (min-width: 768px) {
+  .grid__sizer, .grid__item {
+    position: relative;
+    width: 30%;   }
+    .grid__item--high, .grid__item--high img {
+      height: 25.26316rem;   }
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;   }
+    .grid__sizer, .grid__item {
+      position: relative;
+      width: 18%;   }
+}

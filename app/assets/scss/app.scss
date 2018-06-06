@@ -2,12 +2,6 @@ body {
   padding-top: 54px;
 }
 
-@media (min-width: 992px) {
-  body {
-    padding-top: 56px;
-  }
-}
-
 
 // Remy function
 @function remy($value) {
@@ -26,6 +20,7 @@ header {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
+
 /**
  * Button component
  */
@@ -81,7 +76,7 @@ header {
 .grid__sizer,
 .grid__item {
   position: relative;
-  width: 18%;
+  width: 80%;
 }
 
 .grid__item {
@@ -90,8 +85,8 @@ header {
   overflow: hidden;
 }
 
-.grid__item--high,
-.grid__item--high img {height: remy(480px);}
+
+
 img {
   width: 100%;
   max-width: 100%;
@@ -111,3 +106,39 @@ a,
   }
 }
 .active .fa {color: #f62459;}
+
+
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {
+  .grid__sizer,
+  .grid__item {
+    position: relative;
+    width: 100%;
+  }
+
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (min-width: 768px) {
+  .grid__sizer,
+  .grid__item {
+    position: relative;
+    width: 30%;
+  }
+
+  .grid__item--high,
+  .grid__item--high img {height: remy(480px);}
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+
+  .grid__sizer,
+  .grid__item {
+    position: relative;
+    width: 18%;
+  }
+}
