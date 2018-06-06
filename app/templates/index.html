@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+  <header>
+    <h1 class="text-center">Welcome to MaltGeezers</h1>
+  </header>
+  <section class="container-fluid gallery bg-faded justify-content-md-center">
+  <div class="grid justify-content-md-center">
+    {% include '_review.html' %}
+  </div>
+</section>
+
+<!-- Modal -->
+<div id="modalPicture" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPictureLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <!-- Modal - header -->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="fa fa-times" aria-hidden="true"></span>
+
+          <span class="sr-only">Close</span>
+        </button>
+      </div><!-- .end Modal - header -->
+
+      <!-- Modal - body -->
+      <div class="modal-body">
+        <img class="js-modal-image" src="" alt="Credits to Unsplash.com" />
+      </div><!-- .end Modal - body -->
+
+      <!-- Modal - footer -->
+      <div class="modal-footer">
+        <a class="js-download m-r" href="#" aria-label="Download" download>
+          <span class="fa fa-download" aria-hidden="true"></span>
+
+          <span class="sr-only">Download</span>
+        </a>
+
+        <a class="js-heart m-r" href="#" aria-label="Like">
+          <span class="fa fa-heart" aria-hidden="true"></span>
+
+          <span class="sr-only">Like</span>
+        </a>
+
+        <a class="m-r" href="https://twitter.com/home?status=%40alexdevero%20" target="_blank" aria-label="Comment">
+          <span class="fa fa-comment" aria-hidden="true"></span>
+
+          <span class="sr-only">Comment</span>
+        </a>
+
+        <a href="https://twitter.com/home?status=Check%20out%20this%20Mansory%20Gallery%20tutorial%20on%20http%3A//blog.alexdevero.com/%20%23design%20%23webdesign" target="_blank" aria-label="Share">
+          <span class="fa fa-twitter" aria-hidden="true"></span>
+
+          <span class="sr-only">Tweet it</span>
+        </a>
+      </div><!-- .end Modal - footer -->
+    </div>
+  </div>
+</div>
+<!-- .end modal -->
+
+      <div class="card-columns">
+
+    </div>
+
+<nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> Newer posts
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    Older posts <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+  <!-- /.container -->
+{% endblock %}
