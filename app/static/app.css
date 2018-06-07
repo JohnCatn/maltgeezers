@@ -1,28 +1,41 @@
 body {
   padding-top: 54px; }
 
-  body {
-    font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
+  .ui-menu-item {
+    list-style-type: none; }
 
-    header {
-      padding-top: 2rem;
-      padding-bottom: 2rem; }
+    .ui-helper-hidden-accessible {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px; }
 
-      .btn-review {
-        position: relative;
-        top: 0;
-        margin-top: 50%;
-        opacity: 0;
-        font-size: 1rem;
-        color: #fff;
-        border-radius: 1.84211rem;
-        transform: translateY(-50%);
-        left: 20%;
-        transition: all 0.25s ease-in-out; }
-        .btn-review:focus, .btn-review:hover {
-          color: #111;
-          background-color: #fff;
-          border-color: #fff; }
+      body {
+        font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
+
+        header {
+          padding-top: 2rem;
+          padding-bottom: 2rem; }
+
+          .btn-review {
+            position: relative;
+            top: 0;
+            margin-top: 50%;
+            opacity: 0;
+            font-size: 1rem;
+            color: #fff;
+            border-radius: 1.84211rem;
+            transform: translateY(-50%);
+            left: 20%;
+            transition: all 0.25s ease-in-out; }
+            .btn-review:focus, .btn-review:hover {
+              color: #111;
+              background-color: #fff;
+              border-color: #fff; }
 
 .item__overlay {
   position: absolute;

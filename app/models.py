@@ -202,10 +202,7 @@ class Brand(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'name': self.name,
-            'region': 'Unknown' if self.region is None else self.region.name ,
-            '_links': {
-                'self': url_for('api.get_brands', id=self.id)
-            }
+            'region': 'Unknown' if self.region is None else self.region.name 
         }
         return data
 

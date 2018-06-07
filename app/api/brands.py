@@ -12,13 +12,8 @@ def get_brands():
     data = Brand.to_collection_dict(Brand.query, page, per_page, 'api.get_brands')
     return jsonify(data)
 
-@bp.route('/brandsautocomplete',methods=['POST','GET'])
+@bp.route('/brandsautocomplete',methods=['GET'])
 def brandsautocomplete():
-    result=''
-    if request.method=='POST':
-        query=request.form['q']
-        data = Brand.to_collection_dict(Brand.query.filter(Brand.name.like("%"+query+"%")), 'api.brandsautocomplete')
-        return jsonify(data)
-    else:
-
-        return "ooops"
+    query=request.args.get('q','')
+    data = Brand.to_collection_dict(Brand.query.filter(Brand.name.like("%"+query+"%")), 'api.brandsautocomplete')
+    return jsonify(data)

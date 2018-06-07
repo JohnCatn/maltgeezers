@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, request, g, \
 from flask_login import current_user, login_required
 from app import db
 from app.main.forms import EditProfileForm, ReviewForm
-from app.models import User, Review
+from app.models import User, Review, Brand
 from app.main import bp
 
 
@@ -13,7 +13,13 @@ from app.main import bp
 def add():
     form = ReviewForm()
     if form.validate_on_submit():
-        review = Review(body=form.review.data, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user)
+        if form.brand_id.data is '0':
+            brand = Brand(name=form.brand_name.data)
+            db.session.add(brand)
+            db.session.flush()
+            review = Review(body=form.review.data, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=brand.id)
+        else:
+            review = Review(body=form.review.data, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=form.brand_id.data)
         db.session.add(review)
         db.session.commit()
         flash('Your review is now live!')

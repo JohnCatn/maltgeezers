@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,DecimalField, HiddenField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, NumberRange
 from app.models import User
 
@@ -20,6 +20,8 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 class ReviewForm(FlaskForm):
+    brand_id = HiddenField('Brand',id="brand_id")
+    brand_name = HiddenField('Brand Name',id="brand_name")
     name = StringField('Bottle Name', validators=[DataRequired()])
     age = IntegerField('Age')
     review = TextAreaField('Say something', validators=[
