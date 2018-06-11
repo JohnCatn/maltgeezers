@@ -15,5 +15,5 @@ def get_brands():
 @bp.route('/brandsautocomplete',methods=['GET'])
 def brandsautocomplete():
     query=request.args.get('q','')
-    data = Brand.to_collection_dict(Brand.query.filter(Brand.name.like("%"+query+"%")), 'api.brandsautocomplete')
+    data = Brand.to_collection_dict_all(Brand.query.filter(Brand.name.like("%"+query+"%")), 'api.brandsautocomplete')
     return jsonify(data)

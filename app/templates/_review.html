@@ -1,9 +1,8 @@
 
-  {% for review in reviews %}
-  <a href="#" class="grid__item {% if loop.first %}grid__sizer {% else %}{{ loop.cycle('', 'grid__item--high') }}{% endif %}" data-toggle="modal" data-target="#modalPicture" type="button" value="Expand review" role="button" src="https://img.thewhiskyexchange.com/900/ablob.16yov1.jpg">
+
+  <a href="#" class="grid__item {% if loop_first %}grid__sizer {% else %}{{ loop_cycle }}{% endif %}" data-toggle="modal" data-target="#modalPicture" type="button" data-id="{{review.id}}" value="Expand review" role="button" >
     <div class="item__overlay">
       <span class="item__overlay__desc">{{ review.age }}yr Old {{ review.name }}</span>
     </div>
-    <img src="https://img.thewhiskyexchange.com/900/ablob.16yov1.jpg" alt="{{ review.name }}" />
+    <img src="{{'/static/uploads/' + review.id|string + '/' + review.img_name if review.img_name != None else '/static/img/empty_bottle_thumb.png' }}" alt="{{ review.name }}" />
   </a>
-  {% endfor %}

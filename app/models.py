@@ -37,7 +37,7 @@ class PaginatedAPIMixin(object):
         }
         return data
     @staticmethod
-    def to_collection_dict(query, endpoint, **kwargs):
+    def to_collection_dict_all(query, endpoint, **kwargs):
         resources = query.all()
         data = {
             'items': [item.to_dict() for item in resources],
@@ -54,6 +54,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reviews = db.relationship('Review', backref='author', lazy='dynamic')
+    tastings = db.relationship('Tasting', backref='host', lazy='dynamic')
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     followed = db.relationship(
@@ -202,25 +203,65 @@ class Brand(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'name': self.name,
-            'region': 'Unknown' if self.region is None else self.region.name 
+            'region': 'Unknown' if self.region is None else self.region.name
         }
         return data
 
     def __repr__(self):
         return '<Brand {}>'.format(self.name)
 
-class Review(db.Model):
+class Review(PaginatedAPIMixin, db.Model):
     __tablename__ = 'review'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), nullable=False)
     age = db.Column(db.Integer, nullable=True)
-    body = db.Column(db.String(140))
+    notes = db.Column(db.String(2000))
+    tasting_note = db.Column(db.String(2000))
     max_rating = db.Column(db.Numeric)
     avg_rating = db.Column(db.Numeric)
     min_rating = db.Column(db.Numeric)
+    img_name = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     brand_id = db.Column(db.Integer,db.ForeignKey('brand.id'))
+    tasting_id = db.Column(db.Integer,db.ForeignKey('tasting.id'))
+
+    def to_dict(self):
+        filename = 'img/empty_bottle_thumb.png' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'notes': self.notes,
+            'tasting_notes': self.tasting_note,
+            'max_rating': str(self.max_rating),
+            'avg_rating': str(self.avg_rating),
+            'min_rating': str(self.min_rating),
+            'img_url': url_for('static',filename=filename),
+            '_links': {
+                'self': url_for('api.get_review', id=self.id),
+            }
+        }
+        if self.tasting is not None:
+            data['tasting'] = {
+                'date': '' if self.tasting.date is None else self.tasting.date,
+                'location': 'somewhere' if self.tasting.location is None else self.tasting.location
+            }
+        if self.brand is not None:
+            data['distillery'] = 'Unknown' if self.brand.name is None else self.brand.name
+        return data
+
+    def __repr__(self):
+        return '<Review {}>'.format(self.body)
+
+class Tasting(db.Model):
+    __tablename__ = 'tasting'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    location = db.Column(db.String(300), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reviews = db.relationship('Review', backref='tasting', lazy='dynamic')
+
 
 
     def __repr__(self):

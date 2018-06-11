@@ -3,11 +3,31 @@
 
 {% block content %}
   <header>
-    <h1 class="text-center">Welcome to MaltGeezers</h1>
+    <h2 class="text-center">Our latest tasting {{tasting.date}}</h2>
   </header>
   <section class="container-fluid gallery bg-faded justify-content-md-center">
   <div class="grid justify-content-md-center">
-    {% include '_review.html' %}
+      {% for review in tasting.reviews %}
+        {% with%}
+          {% set loop_first = loop.first %}
+          {% set loop_cycle = 'normal' %}
+          {% include '_review.html'  %}
+        {% endwith %}
+      {% endfor %}
+  </div>
+</section>
+  <header>
+    <h2 class="text-center">All Our Reviews</h2>
+  </header>
+  <section class="container-fluid gallery bg-faded justify-content-md-center">
+  <div class="grid justify-content-md-center">
+      {% for review in reviews %}
+        {% with%}
+          {% set loop_first = loop.first %}
+          {% set loop_cycle = loop.cycle('', 'grid__item--high') %}
+          {% include '_review.html'  %}
+        {% endwith %}
+      {% endfor %}
   </div>
 </section>
 
@@ -17,6 +37,7 @@
     <div class="modal-content">
       <!-- Modal - header -->
       <div class="modal-header">
+        <h4 class="modal-title"></h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span class="fa fa-times" aria-hidden="true"></span>
 
@@ -26,16 +47,64 @@
 
       <!-- Modal - body -->
       <div class="modal-body">
-        <img class="js-modal-image" src="" alt="Credits to Unsplash.com" />
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3">
+              <img class="js-modal-image" src="" alt="" />
+            </div>
+            <div class="col-md-9">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <b>Distillery:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="distillery"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Age:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="age"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Notes:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="notes"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Tasting:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="tasting_notes"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Max:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="max_rating"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Average:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="avg_rating"></span>
+                  </div>
+                  <div class="col-md-6">
+                    <b>Min:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="min_rating"></span>
+                  </div>
+          </div>
+            </div>
+
+      </div>
       </div><!-- .end Modal - body -->
 
       <!-- Modal - footer -->
       <div class="modal-footer">
-        <a class="js-download m-r" href="#" aria-label="Download" download>
-          <span class="fa fa-download" aria-hidden="true"></span>
-
-          <span class="sr-only">Download</span>
-        </a>
 
         <a class="js-heart m-r" href="#" aria-label="Like">
           <span class="fa fa-heart" aria-hidden="true"></span>
@@ -43,13 +112,13 @@
           <span class="sr-only">Like</span>
         </a>
 
-        <a class="m-r" href="https://twitter.com/home?status=%40alexdevero%20" target="_blank" aria-label="Comment">
+        <a class="m-r" href="#" target="_blank" aria-label="Comment">
           <span class="fa fa-comment" aria-hidden="true"></span>
 
           <span class="sr-only">Comment</span>
         </a>
 
-        <a href="https://twitter.com/home?status=Check%20out%20this%20Mansory%20Gallery%20tutorial%20on%20http%3A//blog.alexdevero.com/%20%23design%20%23webdesign" target="_blank" aria-label="Share">
+        <a href="https://twitter.com/home?status=Check%20out%20this%20Whisky%20Review%20by%20the%20MaltGeezers%20http%3A//www.matgeezers.org" target="_blank" aria-label="Share">
           <span class="fa fa-twitter" aria-hidden="true"></span>
 
           <span class="sr-only">Tweet it</span>
@@ -79,4 +148,40 @@
         </ul>
     </nav>
   <!-- /.container -->
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+    $('#modalPicture').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var review_id = button.data('id') // Extract info from data-* attributes
+          var modal = $(this);
+            $.ajax({
+                type: "GET",
+                url: "{{url_for('api.get_reviews')}}/" + review_id,
+                data: '',
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+
+                    $('.modal-title').text(data.name);
+                    $('#distillery').text(data.distillery);
+                    $('#notes').text(data.notes);
+                    $('#tastings').text(data.tasting_notes);
+                    $('#max_rating').text(data.max_rating);
+                    $('#avg_rating').text(data.avg_rating);
+                    $('#min_rating').text(data.min_rating);
+                    $('#age').text(data.age);
+                    $('.js-modal-image').attr('src', data.img_url);
+
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+    })
+ </script>
+
 {% endblock %}

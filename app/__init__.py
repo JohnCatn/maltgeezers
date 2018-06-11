@@ -37,6 +37,10 @@ def load_config(app, env):
         app.config.from_pyfile(CONFIG_FILES[env])
         print('[CONFIG] Loading configuration file from "%s" environment' % env)
 
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 def create_app(env=None):
     app = Flask(__name__)
@@ -44,6 +48,8 @@ def create_app(env=None):
     load_config(app, env)
     if not os.path.exists('logs'):
         os.mkdir('logs')
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.mkdir(app.config['UPLOAD_FOLDER'])
     file_handler = RotatingFileHandler('logs/maltgeezers.log',
                                        maxBytes=10240, backupCount=10)
     file_handler.setFormatter(logging.Formatter(

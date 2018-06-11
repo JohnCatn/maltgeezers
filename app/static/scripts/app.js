@@ -9,13 +9,8 @@
 
  // Image replacement handler
  $(document).on('click', '.grid__item', function() {
-  var imageSrc = $(this).attr('src');
-
-  $('.js-download').attr('href', imageSrc);
-  $('.js-modal-image').attr('src', imageSrc);
-
-  $(document).on('click', '.js-heart', function() {
-   $(this).toggleClass('active');
+   $(document).on('click', '.js-heart', function() {
+     $(this).toggleClass('active');
   });
  });
 })();

@@ -67,24 +67,28 @@ body {
 
     .grid__sizer, .grid__item {
       position: relative;
-      width: 80%; }
+      width: 100%;
+      height: auto; }
 
-      .grid__item {
-        margin-bottom: 0.9375rem;
-        border-radius: 0.21053rem;
-        overflow: hidden; }
+      .grid__item--high, .grid__item--high img {
+        height: 25.26316rem; }
 
-        img {
-          width: 100%;
-          max-width: 100%;
-          height: auto; }
+        .grid__item {
+          margin-bottom: 0.9375rem;
+          border-radius: 0.21053rem;
+          overflow: hidden; }
 
-          a, .fa {
-            color: #bbb;
-            transition: color 0.25s ease-in-out; }
-            a:focus, a:hover, .fa:focus, .fa:hover {
-              text-decoration: none;
-              color: #666; }
+          img {
+            width: 100%;
+            max-width: 100%;
+            height: auto; }
+
+            a, .fa {
+              color: #bbb;
+              transition: color 0.25s ease-in-out; }
+              a:focus, a:hover, .fa:focus, .fa:hover {
+                text-decoration: none;
+                color: #666; }
 
 .active .fa {
   color: #f62459; }
@@ -92,13 +96,15 @@ body {
   @media (min-width: 544px) {
     .grid__sizer, .grid__item {
       position: relative;
-      width: 100%;   }
+      width: 100%;
+      height: auto;   }
 }
 
 @media (min-width: 768px) {
   .grid__sizer, .grid__item {
     position: relative;
-    width: 30%;   }
+    width: 30%;
+    height: auto;   }
     .grid__item--high, .grid__item--high img {
       height: 25.26316rem;   }
 }

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,DecimalField, HiddenField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,DecimalField, HiddenField, DateTimeField, SelectField, FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, NumberRange
 from app.models import User
 
@@ -22,11 +22,23 @@ class EditProfileForm(FlaskForm):
 class ReviewForm(FlaskForm):
     brand_id = HiddenField('Brand',id="brand_id")
     brand_name = HiddenField('Brand Name',id="brand_name")
+    tasting_id = SelectField('Tasting Date',coerce=int, validators=[DataRequired()])
     name = StringField('Bottle Name', validators=[DataRequired()])
     age = IntegerField('Age')
-    review = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
+    notes = TextAreaField('Notes', validators=[
+        DataRequired(), Length(min=1, max=2000)], id="notes")
+    tasting_note = TextAreaField('Tasting', validators=[
+            DataRequired(), Length(min=1, max=2000)],id="tasting")
     max_rating = DecimalField('Max Score', validators=[DataRequired(),NumberRange(0, 10)])
     avg_rating = DecimalField('Average Score', validators=[DataRequired(),NumberRange(0, 10)])
     min_rating = DecimalField('Min Score', validators=[DataRequired(),NumberRange(0,10)])
+    image = FileField("Bottle Image", validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'jpg and png Images only!')
+    submit = SubmitField('Submit')
+
+class TastingForm(FlaskForm):
+    date = DateTimeField('Tasting Date', validators=[DataRequired()],format='%d-%m-%Y %H:%M')
+    location = StringField('Location')
+
     submit = SubmitField('Submit')

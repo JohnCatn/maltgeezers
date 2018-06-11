@@ -45,3 +45,6 @@ development.cfg
 
 # css stylesheets as we use scss
 .css
+
+#Uploads directory
+uploads

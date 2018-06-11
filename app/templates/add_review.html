@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+
 {% block content %}
 <header>
   <h1 class="text-center">Welcome to MaltGeezers</h1>
@@ -26,9 +27,13 @@
 
 {% block scripts %}
     {{ super() }}
+
 <script>
 
+
 $(document).ready(function () { // only begin once page has loaded
+
+
     $('#query').autocomplete({ // attach auto-complete functionality to textbox
         // define source of the data
         source: function (request, response) {
