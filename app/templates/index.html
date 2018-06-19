@@ -10,7 +10,7 @@
       {% for review in tasting.reviews %}
         {% with%}
           {% set loop_first = loop.first %}
-          {% set loop_cycle = 'normal' %}
+          {% set loop_cycle = '' %}
           {% include '_review.html'  %}
         {% endwith %}
       {% endfor %}

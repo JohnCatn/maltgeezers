@@ -70,7 +70,7 @@ body {
       width: 100%;
       height: auto; }
 
-      .grid__item--high, .grid__item--high img {
+      .grid__item, .grid__item img {
         height: 25.26316rem; }
 
         .grid__item {

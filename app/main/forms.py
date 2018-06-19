@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField,DecimalField, HiddenField, DateTimeField, SelectField, FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, NumberRange
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import User
 
 
@@ -34,7 +35,7 @@ class ReviewForm(FlaskForm):
     min_rating = DecimalField('Min Score', validators=[DataRequired(),NumberRange(0,10)])
     image = FileField("Bottle Image", validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'jpg and png Images only!')
+        FileAllowed(['jpg', 'png'], 'jpg and png Images only!')])
     submit = SubmitField('Submit')
 
 class TastingForm(FlaskForm):

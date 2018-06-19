@@ -35,6 +35,12 @@ header {
   padding-bottom: 2rem;
 }
 
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
 /**
  * Button component
  */
@@ -94,8 +100,7 @@ header {
   height: auto;
 }
 
-.grid__item--high,
-.grid__item--high img {height: remy(480px);}
+.grid__item img {height: remy(480px);}
 
 .grid__item {
   margin-bottom: .9375rem;
@@ -105,11 +110,7 @@ header {
 
 
 
-img {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-}
+
 /**
  * Link styles
  */
