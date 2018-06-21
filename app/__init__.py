@@ -9,6 +9,7 @@ from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_scss import Scss
+from config import Config
 
 
 CONFIG_FILES = {'development': 'config/development.cfg',
@@ -24,28 +25,13 @@ mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
 
-def load_config(app, env):
-    app.config.from_object(__name__)
-    app.config.from_pyfile('config/default.cfg')
-    print('[CONFIG] Loading default configuration file')
-
-    var = "test.maltgeezers.org"
-    if env is None and var in os.environ:
-        env = os.environ[var]
-
-    if env in CONFIG_FILES:
-        app.config.from_pyfile(CONFIG_FILES[env])
-        print('[CONFIG] Loading configuration file from "%s" environment' % env)
-
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-def create_app(env=None):
-    app = Flask(__name__)
-
-    load_config(app, env)
     if not os.path.exists('logs'):
         os.mkdir('logs')
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
