@@ -21,21 +21,26 @@ body {
           padding-top: 2rem;
           padding-bottom: 2rem; }
 
-          .btn-review {
-            position: relative;
-            top: 0;
-            margin-top: 50%;
-            opacity: 0;
-            font-size: 1rem;
-            color: #fff;
-            border-radius: 1.84211rem;
-            transform: translateY(-50%);
-            left: 20%;
-            transition: all 0.25s ease-in-out; }
-            .btn-review:focus, .btn-review:hover {
-              color: #111;
-              background-color: #fff;
-              border-color: #fff; }
+          img {
+            width: 100%;
+            max-width: 100%;
+            height: auto; }
+
+            .btn-review {
+              position: relative;
+              top: 0;
+              margin-top: 50%;
+              opacity: 0;
+              font-size: 1rem;
+              color: #fff;
+              border-radius: 1.84211rem;
+              transform: translateY(-50%);
+              left: 20%;
+              transition: all 0.25s ease-in-out; }
+              .btn-review:focus, .btn-review:hover {
+                color: #111;
+                background-color: #fff;
+                border-color: #fff; }
 
 .item__overlay {
   position: absolute;
@@ -70,25 +75,20 @@ body {
       width: 100%;
       height: auto; }
 
-      .grid__item, .grid__item img {
-        height: 25.26316rem; }
+      .grid__item img {
+        height: 15.78947rem; }
 
         .grid__item {
           margin-bottom: 0.9375rem;
           border-radius: 0.21053rem;
           overflow: hidden; }
 
-          img {
-            width: 100%;
-            max-width: 100%;
-            height: auto; }
-
-            a, .fa {
-              color: #bbb;
-              transition: color 0.25s ease-in-out; }
-              a:focus, a:hover, .fa:focus, .fa:hover {
-                text-decoration: none;
-                color: #666; }
+          a, .fa {
+            color: #bbb;
+            transition: color 0.25s ease-in-out; }
+            a:focus, a:hover, .fa:focus, .fa:hover {
+              text-decoration: none;
+              color: #666; }
 
 .active .fa {
   color: #f62459; }
@@ -106,7 +106,7 @@ body {
     width: 30%;
     height: auto;   }
     .grid__item--high, .grid__item--high img {
-      height: 25.26316rem;   }
+      height: 15.78947rem;   }
 }
 
 @media (min-width: 992px) {

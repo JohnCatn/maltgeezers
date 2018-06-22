@@ -13,5 +13,13 @@ class Config(object):
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    ADMINS = []
-    POSTS_PER_PAGE = 25
+    ADMINS = os.environ.get('ADMINS')
+    POSTS_PER_PAGE = int(os.environ.get('POSTS_PER_PAGE') or 25)
+
+    # Flask-User settings
+    USER_APP_NAME = os.environ.get('USER_APP_NAME')      # Shown in and email templates and page footers
+    USER_ENABLE_EMAIL = True        # Enable email authentication
+    USER_ENABLE_USERNAME = True    # Disable username authentication
+    USER_EMAIL_SENDER_NAME = USER_APP_NAME
+    USER_EMAIL_SENDER_EMAIL = os.environ.get('USER_EMAIL_SENDER_EMAIL')
+    USER_ENABLE_CONFIRM_EMAIL = False

@@ -25,7 +25,7 @@ class ReviewForm(FlaskForm):
     brand_name = HiddenField('Brand Name',id="brand_name")
     tasting_id = SelectField('Tasting Date',coerce=int, validators=[DataRequired()])
     name = StringField('Bottle Name', validators=[DataRequired()])
-    age = IntegerField('Age')
+    age = StringField('Age')
     notes = TextAreaField('Notes', validators=[
         DataRequired(), Length(min=1, max=2000)], id="notes")
     tasting_note = TextAreaField('Tasting', validators=[

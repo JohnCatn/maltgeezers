@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 from hashlib import md5
 from time import time
 from flask import current_app, url_for
-from flask_login import UserMixin
+#from flask_login import UserMixin
+from flask_user import UserManager, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from app import db, login
@@ -44,13 +45,32 @@ class PaginatedAPIMixin(object):
         }
         return data
 
+# Define the Role data-model
+class Role(db.Model):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+
+# Define the UserRoles association table
+class UserRoles(db.Model):
+    __tablename__ = 'user_role'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+    role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
+
+
 class User(PaginatedAPIMixin, UserMixin, db.Model):
     __tablename__ = 'user'
-
     id = db.Column(db.Integer, primary_key=True)
+
+    # User authentication information (required for Flask-User)
+    email = db.Column(db.Unicode(255), nullable=False, server_default=u'', unique=True)
+    email_confirmed_at = db.Column(db.DateTime())
+    password = db.Column(db.String(255), nullable=False, server_default='')
+
+    # User fields
+    active = db.Column(db.Boolean()),
     username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reviews = db.relationship('Review', backref='author', lazy='dynamic')
@@ -62,6 +82,10 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    # Define the relationship to Role via UserRoles
+    roles = db.relationship('Role', secondary='user_role',
+                            backref=db.backref('users', lazy='dynamic'))
+
 
     def to_dict(self, include_email=False):
         data = {
@@ -111,11 +135,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
@@ -217,9 +236,9 @@ class Review(PaginatedAPIMixin, db.Model):
     age = db.Column(db.Integer, nullable=True)
     notes = db.Column(db.String(2000))
     tasting_note = db.Column(db.String(2000))
-    max_rating = db.Column(db.Numeric)
-    avg_rating = db.Column(db.Numeric)
-    min_rating = db.Column(db.Numeric)
+    max_rating = db.Column(db.Numeric(10,1))
+    avg_rating = db.Column(db.Numeric(10,1))
+    min_rating = db.Column(db.Numeric(10,1))
     img_name = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

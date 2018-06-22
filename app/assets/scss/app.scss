@@ -100,7 +100,7 @@ img {
   height: auto;
 }
 
-.grid__item img {height: remy(480px);}
+.grid__item img {height: remy(300px);}
 
 .grid__item {
   margin-bottom: .9375rem;
@@ -149,7 +149,7 @@ a,
   }
 
   .grid__item--high,
-  .grid__item--high img {height: remy(480px);}
+  .grid__item--high img {height: remy(300px);}
 }
 
 /* Large devices (desktops, 992px and up) */

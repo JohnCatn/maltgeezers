@@ -2,7 +2,8 @@
 
   <a href="#" class="grid__item {% if loop_first %}grid__sizer {% else %}{{ loop_cycle }}{% endif %}" data-toggle="modal" data-target="#modalPicture" type="button" data-id="{{review.id}}" value="Expand review" role="button" >
     <div class="item__overlay">
-      <span class="item__overlay__desc">{{ review.age }}yr Old {{ review.name }}</span>
+      <div class="item__overlay__desc">{{ review.brand.name }}<br>{% if review.age != 0 %}{{ review.age }}yr Old {% endif %}{{ review.name }}<span class="float-right">{{ review.avg_rating }}/10</span></div>
+
     </div>
     <img src="{{'/static/uploads/' + review.id|string + '/' + review.img_name if review.img_name != None else '/static/img/empty_bottle_thumb.png' }}" alt="{{ review.name }}" />
   </a>

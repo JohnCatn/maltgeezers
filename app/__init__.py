@@ -5,6 +5,7 @@ from flask import Flask, request, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_user import UserManager
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -12,15 +13,14 @@ from flask_scss import Scss
 from config import Config
 
 
-CONFIG_FILES = {'development': 'config/development.cfg',
-                'test'       : 'config/test.cfg',
-                'production' : 'config/production.cfg' }
-
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
+# Setup Flask-User and specify the User data-model
+#user_manager = UserManager()
+
 mail = Mail()
 bootstrap = Bootstrap()
 moment = Moment()
@@ -53,11 +53,13 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
 
+    # Setup Flask-User and specify the User data-model
+    user_manager = UserManager(app, db, User)
+    #user_manager.login_view = 'auth.login'
+    #user_manager.login_message = 'Please log in to access this page.'
+
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
-
-    from app.auth import bp as auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
@@ -82,9 +84,8 @@ def create_app(config_class=Config):
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
 
-
-
-
         app.logger.info('Maltgeezers startup')
 
     return app
+
+from app.models import User

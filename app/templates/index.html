@@ -33,7 +33,7 @@
 
 <!-- Modal -->
 <div id="modalPicture" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPictureLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <!-- Modal - header -->
       <div class="modal-header">
@@ -61,10 +61,10 @@
                   <div class="col-md-6">
                     <span id="distillery"></span>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 age">
                     <b>Age:</b>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6 age">
                     <span id="age"></span>
                   </div>
                   <div class="col-md-6">
@@ -173,7 +173,11 @@
                     $('#max_rating').text(data.max_rating);
                     $('#avg_rating').text(data.avg_rating);
                     $('#min_rating').text(data.min_rating);
-                    $('#age').text(data.age);
+                    if(data.age==0){
+                      $('.age').hide();
+                    } else {
+                      $('#age').text(data.age);
+                    }
                     $('.js-modal-image').attr('src', data.img_url);
 
                 },
