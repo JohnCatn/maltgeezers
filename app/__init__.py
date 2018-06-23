@@ -4,7 +4,6 @@ import os
 from flask import Flask, request, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
 from flask_user import UserManager
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
@@ -15,11 +14,6 @@ from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
-login = LoginManager()
-login.login_view = 'auth.login'
-login.login_message = 'Please log in to access this page.'
-# Setup Flask-User and specify the User data-model
-#user_manager = UserManager()
 
 mail = Mail()
 bootstrap = Bootstrap()
@@ -48,15 +42,12 @@ def create_app(config_class=Config):
     Scss(app)
     db.init_app(app)
     migrate.init_app(app, db)
-    login.init_app(app)
+    # Setup Flask-User and specify the User data-model
+    user_manager = UserManager(app, db, User)
+#    login.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
     moment.init_app(app)
-
-    # Setup Flask-User and specify the User data-model
-    user_manager = UserManager(app, db, User)
-    #user_manager.login_view = 'auth.login'
-    #user_manager.login_message = 'Please log in to access this page.'
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)

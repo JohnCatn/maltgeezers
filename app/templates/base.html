@@ -8,6 +8,27 @@
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
 {% endblock %}
 
+{% block head %}
+{% if config['ENABLE_GA'] %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{config['GA_TRACKING_CODE']}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{config['GA_TRACKING_CODE']}}');
+</script>
+{% endif %}
+{{super()}}
+<!-- Hide this line for IE (needed for Firefox and others) -->
+<![if !IE]>
+<link rel="icon" href="{{url_for('static', filename='img/favicon.png')}}" type="image/x-icon" />
+<![endif]>
+<!-- This is needed for IE -->
+<link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}" type="image/ico" />
+{% endblock %}
+
 {% block metas %}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -58,9 +79,13 @@
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('main.add') }}">Add Review</a>
-            </li>
+            {% if call_or_get(current_user.is_authenticated) %}
+              {% if call_or_get(current_user.has_role('reviewer')) %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.add') }}">Add Review</a>
+              </li>
+              {% endif %}
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
             </li>

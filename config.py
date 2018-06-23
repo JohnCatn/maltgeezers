@@ -23,3 +23,7 @@ class Config(object):
     USER_EMAIL_SENDER_NAME = USER_APP_NAME
     USER_EMAIL_SENDER_EMAIL = os.environ.get('USER_EMAIL_SENDER_EMAIL')
     USER_ENABLE_CONFIRM_EMAIL = False
+
+    #GA Tracking
+    ENABLE_GA = os.environ.get('ENABLE_GA')
+    GA_TRACKING_CODE = os.environ.get('GA_TRACKING_CODE')

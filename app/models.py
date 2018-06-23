@@ -2,11 +2,11 @@ from datetime import datetime, timedelta
 from hashlib import md5
 from time import time
 from flask import current_app, url_for
-#from flask_login import UserMixin
-from flask_user import UserManager, UserMixin
+from flask_user import UserManager, UserMixin, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
-from app import db, login
+# from app import db, login
+from app import db
 import base64
 import os
 
@@ -46,6 +46,20 @@ class PaginatedAPIMixin(object):
         return data
 
 # Define the Role data-model
+class Club(db.Model):
+    __tablename__ = 'club'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    postcode = db.Column(db.String(10), unique=True)
+    tastings = db.relationship('Tasting', backref='club', lazy='dynamic')
+
+class UserClubs(db.Model):
+    __tablename__ = 'user_club'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+    club_id = db.Column(db.Integer(), db.ForeignKey('club.id', ondelete='CASCADE'))
+
+# Define the Role data-model
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer(), primary_key=True)
@@ -57,7 +71,6 @@ class UserRoles(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
     role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
-
 
 class User(PaginatedAPIMixin, UserMixin, db.Model):
     __tablename__ = 'user'
@@ -85,7 +98,39 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     # Define the relationship to Role via UserRoles
     roles = db.relationship('Role', secondary='user_role',
                             backref=db.backref('users', lazy='dynamic'))
+    clubs = db.relationship('Club', secondary='user_club',
+                            backref=db.backref('users', lazy='dynamic'))
 
+    def has_role(self, *specified_role_names):
+        """ Return True if the user has one of the specified roles. Return False otherwise.
+            has_roles() accepts a 1 or more role name parameters
+                has_role(role_name1, role_name2, role_name3).
+            For example:
+                has_roles('a', 'b')
+            Translates to:
+                User has role 'a' OR role 'b'
+        """
+
+        # Allow developers to attach the Roles to the User or the UserProfile object
+        if hasattr(self, 'roles'):
+            roles = self.roles
+        else:
+            if hasattr(self, 'user_profile') and hasattr(self.user_profile, 'roles'):
+                roles = self.user_profile.roles
+            else:
+                roles = None
+        if not roles: return False
+
+        # Translates a list of role objects to a list of role_names
+        user_role_names = [role.name for role in roles]
+
+        # Return True if one of the role_names matches
+        for role_name in specified_role_names:
+            if role_name in user_role_names:
+                return True
+
+        # Return False if none of the role_names matches
+        return False
 
     def to_dict(self, include_email=False):
         data = {
@@ -135,7 +180,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
@@ -174,7 +218,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         own = Review.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Review.timestamp.desc())
 
-@login.user_loader
+# @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
@@ -279,9 +323,8 @@ class Tasting(db.Model):
     date = db.Column(db.DateTime, nullable=False)
     location = db.Column(db.String(300), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
     reviews = db.relationship('Review', backref='tasting', lazy='dynamic')
-
-
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
