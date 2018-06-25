@@ -3,36 +3,32 @@
 
 {% block content %}
   <header>
-    <h2 class="text-center">Our latest tasting {{tasting.date}}</h2>
+    <h1 class="text-center">Latest Tasting Notes</h2>
   </header>
-  <section class="container-fluid gallery bg-faded justify-content-md-center">
-  <div class="grid justify-content-md-center">
+  <div class="centered">
+  <section class="cards cards_align">
       {% for review in tasting.reviews %}
         {% with%}
-          {% set loop_first = loop.first %}
-          {% set loop_cycle = '' %}
           {% include '_review.html'  %}
         {% endwith %}
       {% endfor %}
   </div>
-</section>
+</div>
   <header>
-    <h2 class="text-center">All Our Reviews</h2>
+    <h1 class="text-center">Our Top Reviews</h1>
   </header>
-  <section class="container-fluid gallery bg-faded justify-content-md-center">
-  <div class="grid justify-content-md-center">
+  <div class="centered">
+  <section class="cards">
       {% for review in reviews %}
         {% with%}
-          {% set loop_first = loop.first %}
-          {% set loop_cycle = loop.cycle('', 'grid__item--high') %}
           {% include '_review.html'  %}
         {% endwith %}
       {% endfor %}
   </div>
-</section>
+</div>
 
 <!-- Modal -->
-<div id="modalPicture" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPictureLabel" aria-hidden="true">
+<div id="modalReview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalPictureLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <!-- Modal - header -->
@@ -154,7 +150,7 @@
 {{ super() }}
 
 <script>
-    $('#modalPicture').on('show.bs.modal', function (event) {
+    $('#modalReview').on('show.bs.modal', function (event) {
           var button = $(event.relatedTarget) // Button that triggered the modal
           var review_id = button.data('id') // Extract info from data-* attributes
           var modal = $(this);

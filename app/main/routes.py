@@ -56,7 +56,7 @@ def add_tasting():
 def index():
     page = request.args.get('page', 1, type=int)
     current_time = datetime.utcnow()
-    reviews = Review.query.order_by(Review.timestamp.desc()).paginate(
+    reviews = Review.query.order_by(Review.avg_rating.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     latest_tasting = Tasting.query.filter(Tasting.date < current_time).order_by(Tasting.date.desc()).limit(1)
     next_url = url_for('main.index', page=reviews.next_num) \
@@ -65,6 +65,14 @@ def index():
         if reviews.has_prev else None
     return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0], next_url=next_url,
                            prev_url=prev_url)
+
+@bp.route('/about')
+def about():
+    return render_template("about.html", title='About')
+
+@bp.route('/contact')
+def contact():
+    return render_template("contact.html", title='Contact')
 
 @bp.route('/user/<username>')
 @login_required
