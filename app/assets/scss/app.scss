@@ -131,6 +131,7 @@ img {
     flex: 1 0 500px;
     box-sizing: border-box;
     margin: 1rem .25em;
+    max-width: calc(100% -  1em);
 }
 
 @media screen and (min-width: 40em) {
