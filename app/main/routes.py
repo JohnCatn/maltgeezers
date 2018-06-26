@@ -63,7 +63,7 @@ def index():
         if reviews.has_next else None
     prev_url = url_for('main.index', page=reviews.prev_num) \
         if reviews.has_prev else None
-    return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0], next_url=next_url,
+    return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting, next_url=next_url,
                            prev_url=prev_url)
 
 @bp.route('/about')
