@@ -6,9 +6,11 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css">
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+
 {% endblock %}
 
 {% block head %}
+
 {% if config['ENABLE_GA'] %}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{config['GA_TRACKING_CODE']}}"></script>
@@ -20,6 +22,25 @@
   gtag('config', '{{config['GA_TRACKING_CODE']}}');
 </script>
 {% endif %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "transparent",
+      "text": "#f1d600",
+      "border": "#f1d600"
+    }
+  },
+  "content": {
+    "href": "/cookiepolicy"
+  }
+})});
+</script>
 {{super()}}
 <!-- Hide this line for IE (needed for Firefox and others) -->
 <![if !IE]>
@@ -32,29 +53,29 @@
 {% block metas %}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta property="og:title" content="{{ title }}"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="{{ request.url }}"/>
+<meta property="og:image" content="{{url_for('static', filename='img/maltgeezers.png',_external=True)}}"/>
+<meta property="og:site_name" content="Maltgeezers"/>
+<meta property="og:description" content="{{ title }}"/>
+<meta name="twitter:url" content="{{ request.url }}"/>
+<meta name="twitter:title" content="{{ title }}"/>
+<meta name="twitter:description" content="{{ title }}"/>
+<meta name="twitter:image" content="{{url_for('static', filename='img/maltgeezers.png',_external=True)}}"/>
+<meta name="twitter:image:src" content="{{url_for('static', filename='img/maltgeezers.png',_external=True)}}"/>
+<meta name="twitter:image:width" content="410"/>
+<meta name="twitter:image:height" content="230"/>
+<meta name="twitter:card" content="summary_large_image"/>
 {% endblock %}
 
 
 {% block scripts %}
     {{ super() }}
     {{ moment.include_moment() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.1/masonry.pkgd.min.js"></script>
     <script src="{{url_for('static', filename='scripts/app.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
-    <script>
-    window.addEventListener("load", function(){
-    window.cookieconsent.initialise({
-      "palette": {
-        "popup": {
-          "background": "#000"
-        },
-        "button": {
-          "background": "#f1d600"
-        }
-      }
-    })});
-    </script>
+
 {% endblock %}
 
 {% block title %}

@@ -70,6 +70,10 @@ def index():
 def about():
     return render_template("about.html", title='About')
 
+@bp.route('/cookiepolicy')
+def cookiepolicy():
+    return render_template("cookiepolicy.html", title='Cookie Policy')
+
 @bp.route('/contact')
 def contact():
     return render_template("contact.html", title='Contact')
