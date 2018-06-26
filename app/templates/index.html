@@ -93,6 +93,12 @@
                   <div class="col-md-6">
                     <span id="min_rating"></span>
                   </div>
+                  <div class="col-md-6">
+                    <b>Tasting Date:</b>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="tasting_date"></span>
+                  </div>
           </div>
             </div>
 
@@ -169,6 +175,7 @@
                     $('#max_rating').text(data.max_rating);
                     $('#avg_rating').text(data.avg_rating);
                     $('#min_rating').text(data.min_rating);
+                    $('#tasting_date').text(data.tasting.date);
                     if(data.age==0){
                       $('.age').hide();
                     } else {

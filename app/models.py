@@ -307,7 +307,7 @@ class Review(PaginatedAPIMixin, db.Model):
         }
         if self.tasting is not None:
             data['tasting'] = {
-                'date': '' if self.tasting.date is None else self.tasting.date,
+                'date': '' if self.tasting.date is None else self.tasting.date.strftime('%d, %b %Y'),
                 'location': 'somewhere' if self.tasting.location is None else self.tasting.location
             }
         if self.brand is not None:
