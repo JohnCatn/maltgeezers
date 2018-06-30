@@ -58,7 +58,7 @@ def index():
     current_time = datetime.utcnow()
     reviews = Review.query.order_by(Review.avg_rating.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
-    latest_tasting = Tasting.query.filter(Tasting.date < current_time).order_by(Tasting.date.desc()).limit(1)
+    latest_tasting = Tasting.query.filter(Tasting.date < current_time, Tasting.reviews != None).order_by(Tasting.date.desc()).limit(1)
     next_url = url_for('main.index', page=reviews.next_num) \
         if reviews.has_next else None
     prev_url = url_for('main.index', page=reviews.prev_num) \
