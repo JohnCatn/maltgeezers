@@ -63,8 +63,7 @@ def tastings():
 
 @bp.route('/tasting/<int:tasting_id>', methods=['GET'])
 def tasting(tasting_id):
-    tasting = Tasting.query.filter_by(id=tasting_id).first
-
+    tasting = Tasting.query.filter_by(id=tasting_id).first()
     return render_template("tasting.html", title='Tasting', tasting=tasting)
 
 

@@ -59,7 +59,7 @@ class Tasting(db.Model):
     reviews = db.relationship('Review', backref='tasting', lazy='dynamic')
 
     def __repr__(self):
-        return '<Tasting {}>'.format(self.date)
+        return '<Tasting {}>'.format(self.id)
 
 # Define the Role data-model
 class Club(db.Model):
