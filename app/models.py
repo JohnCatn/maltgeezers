@@ -126,7 +126,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     clubs = db.relationship('Club', secondary='user_club',
                             backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
     tastings = db.relationship('Tasting', secondary='user_tasting',
-                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
+                            backref=db.backref('attendees', lazy='dynamic'), lazy='dynamic')
 
     def has_role(self, *specified_role_names):
         """ Return True if the user has one of the specified roles. Return False otherwise.
