@@ -7,6 +7,8 @@ from app.models import User
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name')
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 
@@ -23,7 +25,7 @@ class EditProfileForm(FlaskForm):
 class ReviewForm(FlaskForm):
     brand_id = HiddenField('Brand',id="brand_id")
     brand_name = HiddenField('Brand Name',id="brand_name")
-    tasting_id = SelectField('Tasting Date',coerce=int, validators=[DataRequired()])
+    tasting_id = HiddenField('Tasting Date',id="tasting_id")
     name = StringField('Bottle Name', validators=[DataRequired()])
     age = StringField('Age')
     notes = TextAreaField('Notes', validators=[
@@ -40,6 +42,7 @@ class ReviewForm(FlaskForm):
 
 class TastingForm(FlaskForm):
     date = DateTimeField('Tasting Date', validators=[DataRequired()],format='%d-%m-%Y %H:%M')
+    club_id = SelectField('Club',coerce=int, validators=[DataRequired()])
     location = StringField('Location')
-
+    num_attendees = IntegerField('Number of Attendees')
     submit = SubmitField('Submit')

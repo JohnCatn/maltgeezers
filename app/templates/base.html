@@ -100,13 +100,10 @@ window.cookieconsent.initialise({
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            {% if call_or_get(current_user.is_authenticated) %}
-              {% if call_or_get(current_user.has_role('reviewer')) %}
+
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('main.add') }}">Add Review</a>
+                <a class="nav-link" href="{{ url_for('main.tastings') }}">Tastings</a>
               </li>
-              {% endif %}
-            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="/about">About</a>
             </li>

@@ -4,18 +4,17 @@ from flask import render_template, flash, redirect, url_for, request, g, \
 from flask_user import current_user, login_required, roles_required
 from app import db
 from app.main.forms import EditProfileForm, ReviewForm, TastingForm
-from app.models import User, Review, Brand, Tasting
+from app.models import User, Review, Brand, Tasting,Club
 from app.main import bp
 from werkzeug import secure_filename
 import pathlib
 
 
-@bp.route('/add', methods=['GET', 'POST'])
+@bp.route('/add/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')    # Use of @roles_required decorator
-def add():
-    form = ReviewForm()
+def add(tasting_id):
+    form = ReviewForm(tasting_id = tasting_id)
     current_time = datetime.utcnow()
-    form.tasting_id.choices = [(row.id, row.date) for row in Tasting.query.filter(Tasting.date < current_time).all()]
     if form.validate_on_submit():
         filename = secure_filename(form.image.data.filename)
         # set age to 0 if it has not been entered
@@ -36,20 +35,79 @@ def add():
         pathlib.Path(current_app.config['UPLOAD_FOLDER'] + '/' + str(review.id)).mkdir(parents=True, exist_ok=True)
         form.image.data.save(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/' + filename)
         flash('Your review is now live!')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.tasting',tasting_id=form.tasting_id.data))
     return render_template('add_review.html', title='Add Review', form=form,)
 
 @bp.route('/add_tasting', methods=['GET', 'POST'])
 @roles_required('reviewer')
 def add_tasting():
     form = TastingForm()
+    form.club_id.choices=[(row.id, row.name) for row in Club.query.all()]
     if form.validate_on_submit():
-        tasting = Tasting(date=form.date.data, location=form.location.data)
+        tasting = Tasting(date=form.date.data, location=form.location.data, num_attendees=form.num_attendees.data)
         db.session.add(tasting)
         db.session.commit()
-        flash('Your tasting is now live!')
-        return redirect(url_for('main.index'))
+        flash('Your tasting is now live, add some whiskies!')
+        return redirect(url_for('main.tasting'))
     return render_template('add_tasting.html', title='Add Tasting', form=form,)
+
+
+@bp.route('/tastings', methods=['GET'])
+def tastings():
+    tastings = Tasting.query.order_by(Tasting.date.desc())
+    return render_template("tastings.html", title='Tastings', tastings=tastings)
+
+@bp.route('/tasting/<int:tasting_id>', methods=['GET'])
+def tasting(tasting_id):
+    tasting = Tasting.query.filter_by(id=tasting_id).first
+
+    return render_template("tasting.html", title='Tasting', tasting=tasting)
+
+
+@bp.route("/tasting/edit/<int:tasting_id>", methods=['GET', 'POST'])
+def edit_tasting(tasting_id):
+    tasting = Tasting.query.filter_by(id=tasting_id).first()
+    form = TastingForm(obj=tasting)
+    form.club_id.choices=[(row.id, row.name) for row in Club.query.all()]
+    if form.validate_on_submit:
+        if request.method == 'POST':
+            tasting.date = form.date.data
+            tasting.location = form.location.data
+            tasting.num_attendees = form.num_attendees.data
+            tasting.club_id = form.club_id.data
+            db.session.commit()
+            flash('Your changes have been saved.')
+            return redirect(url_for('main.tastings'))
+    return render_template('add_tasting.html', title='Edit Tasting', action="Edit", form=form)
+
+@bp.route('/attend/<int:tasting_id>')
+@login_required
+def attend(tasting_id):
+    tasting = Tasting.query.filter_by(id=tasting_id).first()
+    if tasting is None:
+        flash('Tasting {} not found.'.format(tasting_id))
+        return redirect(url_for('main.index'))
+    current_user.attend(tasting)
+    db.session.commit()
+    flash('You are attending {}!'.format(tasting.date))
+    return redirect(request.referrer)
+    #return redirect(url_for('main.tasting', tasting_id=tasting_id))
+
+@bp.route('/unattend/<int:tasting_id>')
+@login_required
+def unattend(tasting_id):
+    tasting = Tasting.query.filter_by(id=tasting_id).first()
+    if tasting is None:
+        flash('Tasting {} not found.'.format(tasting_id))
+        return redirect(url_for('main.index'))
+    current_user.unattend(tasting)
+    db.session.commit()
+    flash('You are not attending {}!'.format(tasting.date))
+    return redirect(request.referrer)
+    # return redirect(url_for('main.tasting', tasting_id=tasting_id))
+
+
+
 
 @bp.route('/')
 @bp.route('/index')

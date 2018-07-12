@@ -15,6 +15,8 @@ followers = db.Table('followers',
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
+
+
 class PaginatedAPIMixin(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
@@ -45,6 +47,20 @@ class PaginatedAPIMixin(object):
         }
         return data
 
+
+class Tasting(db.Model):
+    __tablename__ = 'tasting'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    location = db.Column(db.String(300), nullable=True)
+    num_attendees = db.Column(db.Integer, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
+    reviews = db.relationship('Review', backref='tasting', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Tasting {}>'.format(self.date)
+
 # Define the Role data-model
 class Club(db.Model):
     __tablename__ = 'club'
@@ -72,6 +88,13 @@ class UserRoles(db.Model):
     user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
     role_id = db.Column(db.Integer(), db.ForeignKey('role.id', ondelete='CASCADE'))
 
+class UserTasting(db.Model):
+    __tablename__= 'user_tasting'
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
+    tasting_id = db.Column(db.Integer(), db.ForeignKey('tasting.id', ondelete='CASCADE'))
+
+
 class User(PaginatedAPIMixin, UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -84,10 +107,12 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     # User fields
     active = db.Column(db.Boolean()),
     username = db.Column(db.String(64), index=True, unique=True)
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reviews = db.relationship('Review', backref='author', lazy='dynamic')
-    tastings = db.relationship('Tasting', backref='host', lazy='dynamic')
+    hosted = db.relationship('Tasting', backref='host', lazy='dynamic')
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     followed = db.relationship(
@@ -97,9 +122,11 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     # Define the relationship to Role via UserRoles
     roles = db.relationship('Role', secondary='user_role',
-                            backref=db.backref('users', lazy='dynamic'))
+                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
     clubs = db.relationship('Club', secondary='user_club',
-                            backref=db.backref('users', lazy='dynamic'))
+                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
+    tastings = db.relationship('Tasting', secondary='user_tasting',
+                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
 
     def has_role(self, *specified_role_names):
         """ Return True if the user has one of the specified roles. Return False otherwise.
@@ -211,6 +238,20 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
 
+    def attend(self, tasting):
+        if not self.is_attending(tasting):
+            self.tastings.append(tasting)
+
+    def unattend(self, tasting):
+        if self.is_attending(tasting):
+            self.tastings.remove(tasting)
+
+    def is_attending(self, tasting):
+        user_tastings = [tasting.id for tasting in self.tastings]
+        if tasting.id in user_tastings:
+            return True
+        return False
+
     def followed_reviews(self):
         followed = Review.query.join(
             followers, (followers.c.followed_id == Review.user_id)).filter(
@@ -316,15 +357,3 @@ class Review(PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return '<Review {}>'.format(self.body)
-
-class Tasting(db.Model):
-    __tablename__ = 'tasting'
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime, nullable=False)
-    location = db.Column(db.String(300), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    club_id = db.Column(db.Integer, db.ForeignKey('club.id'))
-    reviews = db.relationship('Review', backref='tasting', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Post {}>'.format(self.body)
