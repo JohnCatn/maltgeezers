@@ -44,5 +44,5 @@ class TastingForm(FlaskForm):
     date = DateTimeField('Tasting Date', validators=[DataRequired()],format='%d-%m-%Y %H:%M')
     club_id = SelectField('Club',coerce=int, validators=[DataRequired()])
     location = StringField('Location')
-    num_attendees = IntegerField('Number of Attendees')
+    num_attendees = StringField('Number of Attendees')
     submit = SubmitField('Submit')

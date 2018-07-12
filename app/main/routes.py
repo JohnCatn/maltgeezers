@@ -44,7 +44,11 @@ def add_tasting():
     form = TastingForm()
     form.club_id.choices=[(row.id, row.name) for row in Club.query.all()]
     if form.validate_on_submit():
-        tasting = Tasting(date=form.date.data, location=form.location.data, num_attendees=form.num_attendees.data)
+        if form.num_attendees.data == "":
+            attendees = None
+        else:
+            attendees = int(form.num_attendees.data)
+        tasting = Tasting(date=form.date.data, location=form.location.data, num_attendees=attendees)
         db.session.add(tasting)
         db.session.commit()
         flash('Your tasting is now live, add some whiskies!')
