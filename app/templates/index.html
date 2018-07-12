@@ -168,18 +168,18 @@
                 success: function (data) {
                     console.log(data);
 
-                    $('.modal-title').text(data.name);
-                    $('#distillery').text(data.distillery);
-                    $('#notes').text(data.notes);
-                    $('#tasting_notes').text(data.tasting_notes);
-                    $('#max_rating').text(data.max_rating);
-                    $('#avg_rating').text(data.avg_rating);
-                    $('#min_rating').text(data.min_rating);
-                    $('#tasting_date').text(data.tasting.date);
+                    $('.modal-title').html(data.name);
+                    $('#distillery').html(data.distillery);
+                    $('#notes').html(data.notes);
+                    $('#tasting_notes').html(data.tasting_notes);
+                    $('#max_rating').html(data.max_rating);
+                    $('#avg_rating').html(data.avg_rating);
+                    $('#min_rating').html(data.min_rating);
+                    $('#tasting_date').html(data.tasting.date);
                     if(data.age==0){
                       $('.age').hide();
                     } else {
-                      $('#age').text(data.age);
+                      $('#age').html(data.age);
                     }
                     $('.js-modal-image').attr('src', data.img_url);
 
