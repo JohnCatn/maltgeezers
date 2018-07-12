@@ -48,11 +48,11 @@ def add_tasting():
             attendees = None
         else:
             attendees = int(form.num_attendees.data)
-        tasting = Tasting(date=form.date.data, location=form.location.data, num_attendees=attendees)
+        tasting = Tasting(date=form.date.data, location=form.location.data, num_attendees=attendees, club_id=form.club_id.data)
         db.session.add(tasting)
         db.session.commit()
         flash('Your tasting is now live, add some whiskies!')
-        return redirect(url_for('main.tasting'))
+        return redirect(url_for('main.tastings'))
     return render_template('add_tasting.html', title='Add Tasting', form=form,)
 
 
