@@ -27,7 +27,7 @@ def add():
             brand = Brand(name=form.brand_name.data)
             db.session.add(brand)
             db.session.flush()
-            review = Review(notes=form.review.data, tasting_note=form.tasting_note.data,img_name=filename,  name=form.name.data, age = age, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=brand.id, tasting_id = form.tasting_id.data)
+            review = Review(notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename,  name=form.name.data, age = age, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=brand.id, tasting_id = form.tasting_id.data)
         else:
             review = Review(notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=form.brand_id.data, tasting_id = form.tasting_id.data)
         db.session.add(review)
