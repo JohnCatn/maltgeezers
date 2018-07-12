@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <header>
+    <h1 class="text-center">Details for {{tasting.date.strftime('%d/%m/%Y') }}</h2>
+  </header>
+  <div class="row">
+    <div class="col-md-1"><b>Club:</b></div>
+    <div class="col-md-3">{{tasting.club.name}}</div>
+    <div class="col-md-1"><b>Location:</b></div>
+    <div class="col-md-3">{{tasting.location}}</div>
+    <div class="col-md-1"><b>Attendees:</b></div>
+    <div class="col-md-3">{{tasting.num_attendees}}</div>
+    <div class="col-md-12 ">
+      {% if call_or_get(current_user.is_authenticated) %}
+        {% if current_user.is_attending(tasting) %}
+          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.unattend', tasting_id=tasting.id) }}">Un-Attend</a>
+          {% else %}
+          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
+          {% endif %}
+      {% else %}
+          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
+      {% endif %}
+      {% if call_or_get(current_user.is_authenticated) %}
+        {% if call_or_get(current_user.has_role('reviewer')) %}
+          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.add', tasting_id=tasting.id) }}">Add Review</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  <header>
+    <h1 class="text-center">Reviews</h2>
+  </header>
+  <div class="centered">
+    <section class="cards cards_align">
+        {% for review in tasting.reviews %}
+          {% with%}
+            {% include '_review.html'  %}
+          {% endwith %}
+        {% endfor %}
+    </section>
+  </div>
+  <header>
+    <h1 class="text-center">Attendees</h2>
+  </header>
+  <div class="row">
+    {% for attendee in tasting.attendees %}
+      <div class="col-md-3">{{attendee.first_name}}</div>
+    {% endfor %}
+  </div>
+{% endblock %}
