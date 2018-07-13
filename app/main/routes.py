@@ -57,13 +57,14 @@ def add(tasting_id):
 def edit_review(review_id):
     review = Review.query.filter_by(id=review_id).first()
     form = ReviewForm(obj=review)
-    form.brand_name.data = review.brand.name
+    if review.brand is not None:
+        form.brand_name.data = review.brand.name
     if form.validate_on_submit:
-        if form.age.data == "":
-            age = 0
-        else:
-            age = int(form.age.data)
         if request.method == 'POST':
+            if form.age.data == "":
+                age = 0
+            else:
+                age = int(form.age.data)
             if form.brand_id.data is '0':
                 brand = Brand(name=form.brand_name.data)
                 db.session.add(brand)
