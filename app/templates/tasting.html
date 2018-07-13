@@ -23,7 +23,8 @@
       {% endif %}
       {% if call_or_get(current_user.is_authenticated) %}
         {% if call_or_get(current_user.has_role('reviewer')) %}
-          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.add_placeholder', tasting_id=tasting.id) }}">Add Placeholder</a>
+        <a class="btn btn-primary float-right mr-4" role="button" href="{{ url_for('main.twitter_post', tasting_id=tasting.id) }}">Publish On Twitter</a>
+        <a class="btn btn-primary float-right mr-4" role="button" href="{{ url_for('main.add_placeholder', tasting_id=tasting.id) }}">Add Placeholder</a>
         {% endif %}
       {% endif %}
     </div>

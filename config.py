@@ -27,3 +27,13 @@ class Config(object):
     #GA Tracking
     ENABLE_GA = os.environ.get('ENABLE_GA')
     GA_TRACKING_CODE = os.environ.get('GA_TRACKING_CODE')
+
+    #Twitter
+    TWITTER_CONSUMER_KEY        = os.environ.get('TWITTER_CONSUMER_KEY')
+    TWITTER_CONSUMER_SECRET     = os.environ.get('TWITTER_CONSUMER_SECRET')
+    TWITTER_ACCESS_TOKEN        = os.environ.get('TWITTER_ACCESS_TOKEN')
+    TWITTER_ACCESS_TOKEN_SECRET = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET')
+
+    #facebook
+    FB_APP_ID = os.environ.get('FB_APP_ID')
+    FB_APP_SECRET = os.environ.get('FB_APP_SECRET')
