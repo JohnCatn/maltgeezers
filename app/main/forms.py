@@ -39,6 +39,7 @@ class ReviewForm(FlaskForm):
     brand_id = HiddenField('Brand',id="brand_id")
     brand_name = HiddenField('Brand Name',id="brand_name")
     tasting_id = HiddenField('Tasting Date',id="tasting_id")
+    order = IntegerField('Bottle Number (1,2,3,...)', validators=[DataRequired()])
     name = StringField('Bottle Name', validators=[DataRequired()])
     age = StringField('Age')
     notes = TextAreaField('Notes', validators=[
@@ -53,7 +54,7 @@ class ReviewForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class TastingForm(FlaskForm):
-    date = DateTimeField('Tasting Date', validators=[DataRequired()],format='%d-%m-%Y %H:%M')
+    date = DateTimeField('Tasting Date (dd-mm-YYYY HH:MM)', validators=[DataRequired()],format='%d-%m-%Y %H:%M')
     club_id = SelectField('Club',coerce=int, validators=[DataRequired()])
     location = StringField('Location')
     num_attendees = StringField('Number of Attendees')

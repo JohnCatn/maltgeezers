@@ -1,11 +1,11 @@
   <article class="card">
       <a href="#" data-toggle="modal" data-target="#modalReview"  data-id="{{review.id}}" value="Expand review" >
           <picture class="thumbnail">
-              <img src="{{'/static/uploads/' + review.id|string + '/' + review.img_name if review.img_name != None else '/static/img/empty_bottle_thumb.png' }}" alt="{{ review.name }}" />
+              <img src="{{review.img_url() }}" alt="{{ review.name }}" />
           </picture>
           <div class="card-content">
             <h2>{{ review.brand.name }}</h2>
-            <p>{% if review.age != 0 %}{{ review.age }}yr Old {% endif %}{{ review.name }}<span class="float-right">{{ review.avg_rating }}/10</span></p>
+            <p>{% if review.age != 0 and review.age is not none %}{{ review.age }}yr Old {% endif %}{{ review.name }}<span class="float-right">{{ review.avg_rating }}/10</span></p>
           </div><!-- .card-content -->
       </a>
   </article><!-- .card -->

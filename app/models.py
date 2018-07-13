@@ -319,6 +319,7 @@ class Brand(PaginatedAPIMixin, db.Model):
 class Review(PaginatedAPIMixin, db.Model):
     __tablename__ = 'review'
     id = db.Column(db.Integer, primary_key=True)
+    order = db.Column(db.Integer, nullable=True)
     name = db.Column(db.String(300), nullable=False)
     age = db.Column(db.Integer, nullable=True)
     notes = db.Column(db.String(2000))
@@ -333,11 +334,11 @@ class Review(PaginatedAPIMixin, db.Model):
     tasting_id = db.Column(db.Integer,db.ForeignKey('tasting.id'))
 
     def img_url(self):
-        filename = 'img/empty_bottle_thumb.png' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
+        filename = 'img/mystery_bottle.jpg' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
         return url_for('static',filename=filename)
 
     def to_dict(self):
-        filename = 'img/empty_bottle_thumb.png' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
+
         data = {
             'id': self.id,
             'name': self.name,
@@ -347,7 +348,7 @@ class Review(PaginatedAPIMixin, db.Model):
             'max_rating': str(self.max_rating),
             'avg_rating': str(self.avg_rating),
             'min_rating': str(self.min_rating),
-            'img_url': url_for('static',filename=filename),
+            'img_url': self.img_url(),
             '_links': {
                 'self': url_for('api.get_review', id=self.id),
             }

@@ -1,4 +1,4 @@
-<h3>{{review.brand.name }}: {% if review.age != 0 %}{{ review.age }}yr Old {% endif %}{{ review.name }}
+<h3>Bottle {{review.order }}:
 {% if call_or_get(current_user.is_authenticated) %}
   {% if call_or_get(current_user.has_role('reviewer')) %}
     <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.edit_review', review_id=review.id) }}">Edit Review</a>
@@ -12,6 +12,8 @@
       <div class="row">
         <div class="col-md-3"> <b>Distillery:</b> </div>
         <div class="col-md-9">{% if review.brand.name == "" %}Unknown{% else %}{{review.brand.name }}{%endif%}</div>
+        <div class="col-md-3"> <b>Name:</b> </div>
+        <div class="col-md-9">{{review.name}}</div>
         <div class="col-md-3 age"> <b>Age:</b> </div>
         <div class="col-md-9 age">{% if review.age != 0 %}{{ review.age }}yr Old {% endif %}</div>
         <div class="col-md-3"> <b>Notes:</b> </div>

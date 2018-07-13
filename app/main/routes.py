@@ -9,6 +9,22 @@ from app.main import bp
 from werkzeug import secure_filename
 import pathlib
 
+@bp.route('/add/dummy/<int:tasting_id>', methods=['GET', 'POST'])
+@roles_required('reviewer')    # Use of @roles_required decorator
+def add_placeholder(tasting_id):
+    tasting = Tasting.query.filter_by(id=tasting_id).first()
+    num_reviews = tasting.reviews.count()
+    #get next number in order
+    review = Review()
+    review.order = num_reviews + 1
+    review.name = "Mystery"
+    #review.img_name = "mystery_bottle.jpg"
+    review.tasting_id = tasting_id
+    db.session.add(review)
+    db.session.commit()
+    flash('Your placeholder has been added')
+    return redirect(url_for('main.tasting',tasting_id=tasting_id))
+
 @bp.route('/add/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')    # Use of @roles_required decorator
 def add(tasting_id):
@@ -25,9 +41,9 @@ def add(tasting_id):
             brand = Brand(name=form.brand_name.data)
             db.session.add(brand)
             db.session.flush()
-            review = Review(notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename,  name=form.name.data, age = age, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=brand.id, tasting_id = form.tasting_id.data)
+            review = Review(order=form.order.data,notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename,  name=form.name.data, age = age, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=brand.id, tasting_id = form.tasting_id.data)
         else:
-            review = Review(notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=form.brand_id.data, tasting_id = form.tasting_id.data)
+            review = Review(order=form.order.data,notes=form.notes.data, tasting_note=form.tasting_note.data,img_name=filename, name=form.name.data, age = form.age.data, max_rating=form.max_rating.data, avg_rating = form.avg_rating.data, min_rating=form.min_rating.data, author=current_user, brand_id=form.brand_id.data, tasting_id = form.tasting_id.data)
         db.session.add(review)
         db.session.commit()
 
@@ -55,7 +71,7 @@ def edit_review(review_id):
                 review.brand_id=brand.id
             else:
                 review.brand_id=form.brand_id.data
-
+            review.order = form.order.data
             review.notes=form.notes.data
             review.tasting_note=form.tasting_note.data
             review.name=form.name.data
@@ -161,6 +177,7 @@ def index():
         if reviews.has_prev else None
     return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0], next_url=next_url,
                            prev_url=prev_url)
+
 
 @bp.route('/about')
 def about():

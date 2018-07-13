@@ -23,7 +23,7 @@
       {% endif %}
       {% if call_or_get(current_user.is_authenticated) %}
         {% if call_or_get(current_user.has_role('reviewer')) %}
-          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.add', tasting_id=tasting.id) }}">Add Review</a>
+          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.add_placeholder', tasting_id=tasting.id) }}">Add Placeholder</a>
         {% endif %}
       {% endif %}
     </div>
