@@ -11,21 +11,21 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3"> <b>Distillery:</b> </div>
-        <div class="col-md-9">{% if review.brand.name == "" %}Unknown{% else %}{{review.brand.name }}{%endif%}</div>
+        <div class="col-md-9">{% if review.brand.name == "" %}Unknown{% else %}{{review.brand.name|safe }}{%endif%}</div>
         <div class="col-md-3"> <b>Name:</b> </div>
-        <div class="col-md-9">{{review.name}}</div>
+        <div class="col-md-9">{{review.name|safe}}</div>
         <div class="col-md-3 age"> <b>Age:</b> </div>
         <div class="col-md-9 age">{% if review.age != 0 %}{{ review.age }}yr Old {% endif %}</div>
         <div class="col-md-3"> <b>Notes:</b> </div>
-        <div class="col-md-9">{{review.notes}}</div>
+        <div class="col-md-9">{{review.notes|safe}}</div>
         <div class="col-md-3"> <b>Tasting:</b> </div>
-        <div class="col-md-9">{{review.tasting_notes}}</div>
+        <div class="col-md-9">{{review.tasting_note|safe}}</div>
         <div class="col-md-3"> <b>Max:</b> </div>
-        <div class="col-md-9">{{review.max_rating}}</div>
+        <div class="col-md-9">{{review.max_rating|safe}}</div>
         <div class="col-md-3"> <b>Average:</b> </div>
-        <div class="col-md-9">{{review.avg_rating}}</div>
+        <div class="col-md-9">{{review.avg_rating|safe}}</div>
         <div class="col-md-3"> <b>Min:</b> </div>
-        <div class="col-md-9">{{review.min_rating}}</div>
+        <div class="col-md-9">{{review.min_rating|safe}}</div>
         <div class="col-md-3"> <b>Tasting Date:</b></div>
         <div class="col-md-9">{{review.tasting.date.strftime('%d/%m/%Y')}}</div>
       </div>
