@@ -34,6 +34,10 @@
         {{ render_field(form.email, tabindex=220) }}
     {% endif %}
 
+    {{ render_field(form.first_name, tabindex=222) }}
+
+    {{ render_field(form.last_name, tabindex=224) }}
+
     {{ render_field(form.password, tabindex=230) }}
 
     {% if user_manager.USER_REQUIRE_RETYPE_PASSWORD %}

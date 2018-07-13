@@ -43,7 +43,8 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     # Setup Flask-User and specify the User data-model
-    user_manager = UserManager(app, db, User)
+    user_manager = MaltgeezersUserManager(app, db, User)
+    #user_manager = UserManager(app, db, User)
 #    login.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
@@ -80,3 +81,4 @@ def create_app(config_class=Config):
     return app
 
 from app.models import User
+from app.main.forms import MaltgeezersUserManager

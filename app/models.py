@@ -95,9 +95,10 @@ class UserTasting(db.Model):
     tasting_id = db.Column(db.Integer(), db.ForeignKey('tasting.id', ondelete='CASCADE'))
 
 
-class User(PaginatedAPIMixin, UserMixin, db.Model):
+class User(db.Model, UserMixin, PaginatedAPIMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
+    active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
 
     # User authentication information (required for Flask-User)
     email = db.Column(db.Unicode(255), nullable=False, server_default=u'', unique=True)
@@ -105,11 +106,10 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     password = db.Column(db.String(255), nullable=False, server_default='')
 
     # User fields
-    active = db.Column(db.Boolean()),
     username = db.Column(db.String(64), index=True, unique=True)
-    first_name = db.Column(db.String(64), nullable=False)
-    last_name = db.Column(db.String(64), nullable=False)
-    about_me = db.Column(db.String(140))
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=True)
+    about_me = db.Column(db.String(140), nullable=True)
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     reviews = db.relationship('Review', backref='author', lazy='dynamic')
     hosted = db.relationship('Tasting', backref='host', lazy='dynamic')
@@ -258,6 +258,8 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
                 followers.c.follower_id == self.id)
         own = Review.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Review.timestamp.desc())
+
+
 
 # @login.user_loader
 def load_user(id):

@@ -9,7 +9,6 @@ from app.main import bp
 from werkzeug import secure_filename
 import pathlib
 
-
 @bp.route('/add/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')    # Use of @roles_required decorator
 def add(tasting_id):
@@ -93,7 +92,10 @@ def attend(tasting_id):
     current_user.attend(tasting)
     db.session.commit()
     flash('You are attending {}!'.format(tasting.date))
-    return redirect(request.referrer)
+    if "sign-in" not in request.referrer:
+        return redirect(request.referrer)
+    else:
+        return redirect(url_for('main.tastings'))
     #return redirect(url_for('main.tasting', tasting_id=tasting_id))
 
 @bp.route('/unattend/<int:tasting_id>')
@@ -108,8 +110,6 @@ def unattend(tasting_id):
     flash('You are not attending {}!'.format(tasting.date))
     return redirect(request.referrer)
     # return redirect(url_for('main.tasting', tasting_id=tasting_id))
-
-
 
 
 @bp.route('/')

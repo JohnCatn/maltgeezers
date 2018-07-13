@@ -3,7 +3,20 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, NumberRange
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app.models import User
+from flask_user import UserManager
 
+# Customize the Register form:
+from flask_user.forms import RegisterForm
+class MaltgeezersRegisterForm(RegisterForm):
+    # Add a name fields to the Register form
+    first_name = StringField(('First Name'), validators=[DataRequired()])
+    last_name = StringField(('Last Name'), validators=[])
+
+# Customize Flask-Userto support registration form
+class MaltgeezersUserManager(UserManager):
+    def customize(self, app):
+        # Configure customized forms
+        self.RegisterFormClass = MaltgeezersRegisterForm
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
