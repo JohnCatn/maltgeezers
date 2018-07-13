@@ -37,6 +37,21 @@ def add(tasting_id):
         return redirect(url_for('main.tasting',tasting_id=form.tasting_id.data))
     return render_template('add_review.html', title='Add Review', form=form,)
 
+@bp.route("/review/edit/<int:review_id>", methods=['GET', 'POST'])
+def edit_review(review_id):
+    review = Review.query.filter_by(id=review_id).first()
+    form = ReviewForm(obj=review)
+    if form.validate_on_submit:
+        if request.method == 'POST':
+            #tasting.date = form.date.data
+            #tasting.location = form.location.data
+            #tasting.num_attendees = form.num_attendees.data
+            #tasting.club_id = form.club_id.data
+            #db.session.commit()
+            flash('Your changes have been saved.')
+            return redirect(url_for('main.tasting',tasting_id=review.tasting.id))
+    return render_template('add_review.html', title='Edit Review', action="Edit", form=form)
+
 @bp.route('/add_tasting', methods=['GET', 'POST'])
 @roles_required('reviewer')
 def add_tasting():
@@ -53,7 +68,6 @@ def add_tasting():
         flash('Your tasting is now live, add some whiskies!')
         return redirect(url_for('main.tastings'))
     return render_template('add_tasting.html', title='Add Tasting', form=form,)
-
 
 @bp.route('/tastings', methods=['GET'])
 def tastings():
@@ -110,7 +124,6 @@ def unattend(tasting_id):
     flash('You are not attending {}!'.format(tasting.date))
     return redirect(request.referrer)
     # return redirect(url_for('main.tasting', tasting_id=tasting_id))
-
 
 @bp.route('/')
 @bp.route('/index')

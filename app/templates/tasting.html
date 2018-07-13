@@ -31,14 +31,12 @@
   <header>
     <h1 class="text-center">Reviews</h2>
   </header>
-  <div class="centered">
-    <section class="cards cards_align">
+  <div class="container">
         {% for review in tasting.reviews %}
           {% with%}
-            {% include '_review.html'  %}
+            {% include '_review_inline.html'  %}
           {% endwith %}
         {% endfor %}
-    </section>
   </div>
   <header>
     <h1 class="text-center">Attendees</h2>

@@ -332,6 +332,10 @@ class Review(PaginatedAPIMixin, db.Model):
     brand_id = db.Column(db.Integer,db.ForeignKey('brand.id'))
     tasting_id = db.Column(db.Integer,db.ForeignKey('tasting.id'))
 
+    def img_url(self):
+        filename = 'img/empty_bottle_thumb.png' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
+        return url_for('static',filename=filename)
+
     def to_dict(self):
         filename = 'img/empty_bottle_thumb.png' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
         data = {
