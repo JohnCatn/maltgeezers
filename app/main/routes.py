@@ -41,14 +41,36 @@ def add(tasting_id):
 def edit_review(review_id):
     review = Review.query.filter_by(id=review_id).first()
     form = ReviewForm(obj=review)
+    form.brand_name.data = review.brand.name
     if form.validate_on_submit:
+        if form.age.data == "":
+            age = 0
+        else:
+            age = int(form.age.data)
         if request.method == 'POST':
-            #tasting.date = form.date.data
-            #tasting.location = form.location.data
-            #tasting.num_attendees = form.num_attendees.data
-            #tasting.club_id = form.club_id.data
-            #db.session.commit()
-            flash('Your changes have been saved.')
+            if form.brand_id.data is '0':
+                brand = Brand(name=form.brand_name.data)
+                db.session.add(brand)
+                db.session.flush()
+                review.brand_id=brand.id
+            else:
+                review.brand_id=form.brand_id.data
+
+            review.notes=form.notes.data
+            review.tasting_note=form.tasting_note.data
+            review.name=form.name.data
+            review.age=age
+            review.max_rating=form.max_rating.data
+            review.avg_rating = form.avg_rating.data
+            review.min_rating=form.min_rating.data
+            review.author=current_user
+            if form.image.data is not None:
+                filename = secure_filename(form.image.data.filename)
+                pathlib.Path(current_app.config['UPLOAD_FOLDER'] + '/' + str(review.id)).mkdir(parents=True, exist_ok=True)
+                form.image.data.save(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/' + filename)
+                review.img_name = filename
+            db.session.commit()
+            flash('Your changes have been saved.' )
             return redirect(url_for('main.tasting',tasting_id=review.tasting.id))
     return render_template('add_review.html', title='Edit Review', action="Edit", form=form)
 

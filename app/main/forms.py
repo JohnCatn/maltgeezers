@@ -49,7 +49,6 @@ class ReviewForm(FlaskForm):
     avg_rating = DecimalField('Average Score', validators=[DataRequired(),NumberRange(0, 10)])
     min_rating = DecimalField('Min Score', validators=[DataRequired(),NumberRange(0,10)])
     image = FileField("Bottle Image", validators=[
-        FileRequired(),
         FileAllowed(['jpg', 'png'], 'jpg and png Images only!')])
     submit = SubmitField('Submit')
 

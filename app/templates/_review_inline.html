@@ -3,9 +3,9 @@
   {% if call_or_get(current_user.has_role('reviewer')) %}
     <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.edit_review', review_id=review.id) }}">Edit Review</a>
   {% endif %}
-{% endif %}  
+{% endif %}
 </h3>
-<div class="row">
+<div class="row pb-5">
   <div class="col-md-3"> <img class="js-modal-image" src="{{review.img_url()}}" alt="{{review.name}}" /> </div>
   <div class="col-md-9">
     <div class="container">
