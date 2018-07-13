@@ -2,7 +2,20 @@
 
 {% block content %}
   <header>
-    <h1 class="text-center">Details for {{tasting.date.strftime('%d/%m/%Y') }}</h2>
+    <h1 class="text-center">Details for {{tasting.date.strftime('%d/%m/%Y') }}
+      {% if call_or_get(current_user.is_authenticated) %}
+        {% if current_user.is_attending(tasting) %}
+          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.unattend', tasting_id=tasting.id) }}">Un-Attend</a>
+          {% else %}
+          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
+          {% endif %}
+      {% else %}
+          <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
+      {% endif %}
+      </h2>
+      <div class="float-right  mr-4"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button " data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+      <div class="fb-share-button float-right mr-4" data-href="{{ url_for('main.tasting', tasting_id=tasting.id, _external=True) }}" data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+
   </header>
   <div class="row">
     <div class="col-md-1"><b>Club:</b></div>
@@ -12,15 +25,8 @@
     <div class="col-md-1"><b>Attendees:</b></div>
     <div class="col-md-3">{{tasting.num_attendees}}</div>
     <div class="col-md-12 ">
-      {% if call_or_get(current_user.is_authenticated) %}
-        {% if current_user.is_attending(tasting) %}
-          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.unattend', tasting_id=tasting.id) }}">Un-Attend</a>
-          {% else %}
-          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
-          {% endif %}
-      {% else %}
-          <a class="btn btn-primary float-left" role="button" href="{{ url_for('main.attend', tasting_id=tasting.id) }}">Attend</a>
-      {% endif %}
+
+
       {% if call_or_get(current_user.is_authenticated) %}
         {% if call_or_get(current_user.has_role('reviewer')) %}
         <a class="btn btn-primary float-right mr-4" role="button" href="{{ url_for('main.twitter_post', tasting_id=tasting.id) }}">Publish On Twitter</a>

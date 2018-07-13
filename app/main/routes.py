@@ -116,7 +116,7 @@ def tastings():
 @bp.route('/tasting/<int:tasting_id>', methods=['GET'])
 def tasting(tasting_id):
     tasting = Tasting.query.filter_by(id=tasting_id).first()
-    return render_template("tasting.html", title='Tasting', tasting=tasting)
+    return render_template("tasting.html", title='Tasting', tasting=tasting, description="Our tasting notes from the " + tasting.date.strftime('%d/%m/%Y') + " meetup.")
 
 
 @bp.route("/tasting/edit/<int:tasting_id>", methods=['GET', 'POST'])
