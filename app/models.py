@@ -351,6 +351,7 @@ class Review(PaginatedAPIMixin, db.Model):
             'img_url': self.img_url(),
             '_links': {
                 'self': url_for('api.get_review', id=self.id),
+                'review': url_for('main.review', review_id=self.id,_external=True)
             }
         }
         if self.tasting is not None:

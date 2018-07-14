@@ -114,16 +114,9 @@
           <span class="sr-only">Like</span>
         </a>
 
-            <a class="m-r" href="#" target="_blank" aria-label="Comment">
-          <span class="fa fa-comment" aria-hidden="true"></span>
-
-          <span class="sr-only">Comment</span>
-        </a>
-
-            <div class="float-right"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-              <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-            </div>
-
+            <span id="SocialTwitter">
+            <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Checkout the Maltgeezers review for" data-url="http://maltgeezers.com" data-via="bvmaltgeezers" data-hashtags="whisky #test" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </span>
             <div class="fb-share-button" data-href="https://maltgeezers.org/" data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
           </div>
           <!-- .end Modal - footer -->
@@ -184,7 +177,30 @@
           $('#age').html(data.age);
         }
         $('.js-modal-image').attr('src', data.img_url);
-        $('.fb-share-button').attr('data-href', '{{url_for('main.index',_external=True)}}')
+        $('.fb-share-button').attr('data-href', data._links.review)
+        $('.twitter-share-button').attr('data-url', data._links.review)
+        $('.twitter-share-button').attr('data-hashtags', '#whisky, #' + data.distillery)
+        $('.twitter-share-button').attr('data-text', 'Checkout the Maltgeezers review for ' + data.distillery + ' '  + data.name)
+
+        // Update the twitter share
+        // Remove the iframe
+        $('#SocialTwitter iframe').remove();
+
+        // Generate new markup
+        $('<a>', {
+          class: 'twitter-share-button',
+          id: 'tweet_btn',
+          href: 'http://twitter.com/intent/tweet',
+          'data-url': data._links.review,
+          'data-hashtags': 'whisky, ' + data.distillery,
+          'data-text': 'Checkout the Maltgeezers review for ' + data.distillery + ' '  + data.name
+        }).appendTo('#SocialTwitter');
+
+
+        // Reload the widget
+        twttr.widgets.load();
+
+
 
       },
       error: function(err) {
