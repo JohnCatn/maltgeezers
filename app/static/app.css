@@ -17,9 +17,7 @@ html {
         color: #007489; }
 
         #footer {
-          bottom: 0;
           width: 100%;
-          height: 60px;
           background-color: #343a40; }
 
           .help-block {
