@@ -117,7 +117,9 @@
             <span id="SocialTwitter">
             <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Checkout the Maltgeezers review for" data-url="http://maltgeezers.com" data-via="bvmaltgeezers" data-hashtags="whisky #test" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
           </span>
+          <span id="fbholder">
             <div class="fb-share-button" data-href="https://maltgeezers.org/" data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+          </span>
           </div>
           <!-- .end Modal - footer -->
         </div>
@@ -181,7 +183,13 @@
         $('.twitter-share-button').attr('data-url', data._links.review)
         $('.twitter-share-button').attr('data-hashtags', '#whisky, #' + data.distillery)
         $('.twitter-share-button').attr('data-text', 'Checkout the Maltgeezers review for ' + data.distillery + ' '  + data.name)
-
+        //reload facebook controls
+        // Facebook
+        var f = $('<div class="fb-share-button" data-layout="button">');
+        $(f).attr('data-href', data._links.review);
+        $('#fbholder').empty();
+        $(f).appendTo($('#fbholder'));
+        FB.XFBML.parse(document);
         // Update the twitter share
         // Remove the iframe
         $('#SocialTwitter iframe').remove();
