@@ -121,7 +121,7 @@ def tasting(tasting_id):
 @bp.route('/review/<int:review_id>', methods=['GET'])
 def review(review_id):
     review = Review.query.filter_by(id=review_id).first()
-    return render_template("bottle.html", title='Review of ' + review.name, review=review, description=review.notes )
+    return render_template("bottle.html", title='Review of ' + review.name, review=review, description=review.notes, image_url=review.img_url_external() )
 
 @bp.route("/tasting/edit/<int:tasting_id>", methods=['GET', 'POST'])
 def edit_tasting(tasting_id):

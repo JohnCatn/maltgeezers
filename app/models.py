@@ -336,6 +336,9 @@ class Review(PaginatedAPIMixin, db.Model):
     def img_url(self):
         filename = 'img/mystery_bottle.jpg' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
         return url_for('static',filename=filename)
+    def img_url_external(self):
+        filename = 'img/mystery_bottle.jpg' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
+        return url_for('static',filename=filename, _external=True)
 
     def to_dict(self):
 
