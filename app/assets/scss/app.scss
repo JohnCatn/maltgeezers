@@ -1,11 +1,29 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   padding-top: 54px;
   background: hsl(0, 0%, 90%);
+  font: 100% / 1.414 "Poiret One", "Roboto", sans-serif;
+}
+
+
+header {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 h2 {
   font-size: 1rem;
   color: #007489;
+}
+
+#footer {
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
 }
 
 .help-block{
@@ -31,19 +49,7 @@ h2 {
 @function remy($value) {
   @return ($value / 19px) *1rem;
 }
-/**
- * Base styles
- */
-body {
-  font: 100% / 1.414 "Poiret One", "Roboto", sans-serif;
-}
-/**
- * Layout styles
- */
-header {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
+
 
 /**
  * Button component

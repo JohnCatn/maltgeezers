@@ -1,49 +1,56 @@
-body {
-  padding-top: 54px;
-  background: #e6e6e6; }
+html {
+  position: relative;
+  min-height: 100%; }
 
-  h2 {
-    font-size: 1rem;
-    color: #007489; }
+  body {
+    padding-top: 54px;
+    background: #e6e6e6;
+    font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
 
-    .help-block {
-      color: red; }
+    header {
+      padding-top: 2rem;
+      padding-bottom: 2rem; }
 
-      .ui-menu-item {
-        list-style-type: none; }
+      h2 {
+        font-size: 1rem;
+        color: #007489; }
 
-        .ui-helper-hidden-accessible {
-          border: 0;
-          clip: rect(0 0 0 0);
-          height: 1px;
-          margin: -1px;
-          overflow: hidden;
-          padding: 0;
-          position: absolute;
-          width: 1px; }
+        #footer {
+          bottom: 0;
+          width: 100%;
+          background-color: #343a40; }
 
-          body {
-            font: 100% / 1.414 "Poiret One", "Roboto", sans-serif; }
+          .help-block {
+            color: red; }
 
-            header {
-              padding-top: 2rem;
-              padding-bottom: 2rem; }
+            .ui-menu-item {
+              list-style-type: none; }
 
-              .btn-review {
-                position: relative;
-                top: 0;
-                margin-top: 50%;
-                opacity: 0;
-                font-size: 1rem;
-                color: #fff;
-                border-radius: 1.84211rem;
-                transform: translateY(-50%);
-                left: 20%;
-                transition: all 0.25s ease-in-out; }
-                .btn-review:focus, .btn-review:hover {
-                  color: #111;
-                  background-color: #fff;
-                  border-color: #fff; }
+              .ui-helper-hidden-accessible {
+                border: 0;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px; }
+
+                .btn-review {
+                  position: relative;
+                  top: 0;
+                  margin-top: 50%;
+                  opacity: 0;
+                  font-size: 1rem;
+                  color: #fff;
+                  border-radius: 1.84211rem;
+                  transform: translateY(-50%);
+                  left: 20%;
+                  transition: all 0.25s ease-in-out; }
+                  .btn-review:focus, .btn-review:hover {
+                    color: #111;
+                    background-color: #fff;
+                    border-color: #fff; }
 
 a, .fa {
   color: #bbb;
