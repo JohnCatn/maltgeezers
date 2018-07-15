@@ -259,8 +259,6 @@ class User(db.Model, UserMixin, PaginatedAPIMixin):
         own = Review.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Review.timestamp.desc())
 
-
-
 # @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

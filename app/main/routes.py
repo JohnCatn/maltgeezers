@@ -176,12 +176,14 @@ def index():
     reviews = Review.query.order_by(Review.avg_rating.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     latest_tasting = Tasting.query.filter(Tasting.date < current_time, Tasting.reviews != None).order_by(Tasting.date.desc()).limit(1)
-    next_url = url_for('main.index', page=reviews.next_num) \
-        if reviews.has_next else None
-    prev_url = url_for('main.index', page=reviews.prev_num) \
-        if reviews.has_prev else None
-    return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0], next_url=next_url,
-                           prev_url=prev_url)
+    return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0])
+
+@bp.route('/reviews')
+def reviews():
+    page = request.args.get('page', 1, type=int)
+    reviews = Review.query.order_by(Review.avg_rating.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    return render_template("reviews.html", title='All Reviews', reviews=reviews)
 
 
 @bp.route('/about')

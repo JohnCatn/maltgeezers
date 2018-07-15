@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% import 'bootstrap/wtf.html' as wtf %}
+
+{% from "_macros.html" import render_pagination %}
+
+{% block content %}
+    <header>
+      <h1 class="text-center">All Reviews</h1>
+    </header>
+    <div class="centered">
+      <section class="cards">
+        {% for review in reviews.items %} {% with%} {% include '_review.html' %} {% endwith %} {% endfor %}
+    </div>
+    {{render_pagination(reviews, 'main.reviews')}}
+
+{% include '_review_modal.html' %}
+
+{% endblock %}

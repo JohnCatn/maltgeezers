@@ -1,0 +1,28 @@
+{% macro render_pagination(pagination, endpoint) -%}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {% if not pagination.prev_num %} disabled{% endif %}">
+      <a class="page-link" href="{{ url_for(endpoint, page=pagination.prev_num) or '#' }}" tabindex="-1">Previous</a>
+    </li>
+    {%- for page in pagination.iter_pages() %}
+      {% if page %}
+        {% if page != pagination.page %}
+          <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+        {% else %}
+        <li class="page-item active">
+        <span class="page-link">
+          {{ page }}
+          <span class="sr-only">(current)</span>
+        </span>
+      </li>
+        {% endif %}
+      {% else %}
+        <span class=ellipsis>…</span>
+      {% endif %}
+      {%- endfor %}
+    <li class="page-item {% if not pagination.next_num %} disabled{% endif %}">
+      <a class="page-link" href="{{  url_for(endpoint, page=pagination.next_num)  or '#' }}">Next</a>
+    </li>
+  </ul>
+</nav>
+{%- endmacro %}

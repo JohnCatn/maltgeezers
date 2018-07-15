@@ -40,6 +40,7 @@ window.cookieconsent.initialise({
     "href": "/cookiepolicy"
   }
 })});
+var get_reviews_url= '{{url_for('api.get_reviews')}}/';
 </script>
 {{super()}}
 <!-- Hide this line for IE (needed for Firefox and others) -->
@@ -105,11 +106,11 @@ window.cookieconsent.initialise({
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('main.tastings') }}">Tastings</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.reviews') }}">Reviews</a>
+              </li>
             <li class="nav-item">
               <a class="nav-link" href="/about">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/contact">Contact</a>
             </li>
             {% if call_or_get(current_user.is_authenticated) %}
             <li class="nav-item">
@@ -156,6 +157,7 @@ window.cookieconsent.initialise({
 			<div class="row text-center text-xs-center text-sm-left text-md-left pt-1">
         <div class="col-xs-12 col-sm-4 col-md-4">
             <a href="{{url_for('main.cookiepolicy')}}"><i class=" mr-1"></i>privacy policy</a>
+            <a href="{{url_for('main.contact')}}"><i class=" mr-1"></i>contact</a>
 				</div>
 				<div class="col-xs-12 col-sm-4 col-md-4">
           <span class="h6 text-light">&copy copyright 2018 <a class="text-green ml-2" href="https://www.maltgeezers.org">Maltgeezers</a></span>
