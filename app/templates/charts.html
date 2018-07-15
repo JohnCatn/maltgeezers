@@ -9,7 +9,7 @@
   <div id="myDiv"></div>
   <script>
   /* JAVASCRIPT CODE GOES HERE */
-  var url='http://localhost:5000/api/reviews_chart';
+  var url='{{url_for('api.get_reviews_chart')}}';
 
 d3.json(url, function(error, data) {
   if (error) return console.warn(error);
