@@ -3,11 +3,22 @@ from flask import render_template, flash, redirect, url_for, request, g, \
     jsonify, current_app
 from flask_user import current_user, login_required, roles_required
 from app import db
-from app.main.forms import EditProfileForm, ReviewForm, TastingForm
-from app.models import User, Review, Brand, Tasting,Club
+from app.main.forms import EditProfileForm, ReviewForm, TastingForm, ScoreForm
+from app.models import User, Review, Brand, Tasting,Club, Score
 from app.main import bp
 from werkzeug import secure_filename
 import pathlib
+
+import decimal
+import flask.json
+
+class MaltgeezersJSONEncoder(flask.json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj, decimal.Decimal):
+            # Convert decimal instances to strings.
+            return str(obj)
+        return super(MyJSONEncoder, self).default(obj)
 
 @bp.route('/add/dummy/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')    # Use of @roles_required decorator
@@ -118,10 +129,19 @@ def tasting(tasting_id):
     tasting = Tasting.query.filter_by(id=tasting_id).first()
     return render_template("tasting.html", title='Tasting', tasting=tasting, description="Our tasting notes from the " + tasting.date.strftime('%d/%m/%Y') + " meetup.")
 
-@bp.route('/review/<int:review_id>', methods=['GET'])
+@bp.route('/review/<int:review_id>', methods=['GET','POST'])
 def review(review_id):
     review = Review.query.filter_by(id=review_id).first()
-    return render_template("bottle.html", title='Review of ' + review.title(), review=review, description=review.notes, image_url=review.img_url_external() )
+    form=ScoreForm()
+    form.review_id.data = review.id
+    if form.validate_on_submit:
+        if request.method == 'POST':
+            score = Score(review_id=review.id, score=form.score.data, notes=form.notes.data)
+            db.session.add(score)
+            db.session.commit()
+            flash('Your score has been added.')
+            return redirect(url_for('main.review', review_id=review.id))
+    return render_template("bottle.html", title='Review of ' + review.title(), form=form,review=review, description=review.notes, image_url=review.img_url_external() )
 
 @bp.route("/tasting/edit/<int:tasting_id>", methods=['GET', 'POST'])
 def edit_tasting(tasting_id):
@@ -197,6 +217,10 @@ def cookiepolicy():
 @bp.route('/contact')
 def contact():
     return render_template("contact.html", title='Contact')
+
+@bp.route('/charts')
+def charts():
+    return render_template("charts.html", title='Charts')
 
 @bp.route('/user/<username>')
 @login_required

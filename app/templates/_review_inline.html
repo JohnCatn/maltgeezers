@@ -1,7 +1,7 @@
 <h3>Bottle {{review.order }}:
 {% if call_or_get(current_user.is_authenticated) %}
   {% if call_or_get(current_user.has_role('reviewer')) %}
-    <a class="btn btn-primary float-right" role="button" href="{{ url_for('main.edit_review', review_id=review.id) }}">Edit Review</a>
+    <a class="btn btn-primary float-right mr-4" role="button" href="{{ url_for('main.edit_review', review_id=review.id) }}">Edit Review</a>
   {% endif %}
 {% endif %}
 </h3>
@@ -21,11 +21,11 @@
         <div class="col-md-3"> <b>Tasting:</b> </div>
         <div class="col-md-9">{{review.tasting_note|safe}}</div>
         <div class="col-md-3"> <b>Max:</b> </div>
-        <div class="col-md-9">{{review.max_rating|safe}}</div>
+        <div class="col-md-9">{{review.max()|safe}}</div>
         <div class="col-md-3"> <b>Average:</b> </div>
-        <div class="col-md-9">{{review.avg_rating|safe}}</div>
+        <div class="col-md-9">{{review.avg()|safe}}</div>
         <div class="col-md-3"> <b>Min:</b> </div>
-        <div class="col-md-9">{{review.min_rating|safe}}</div>
+        <div class="col-md-9">{{review.min()|safe}}</div>
         <div class="col-md-3"> <b>Tasting Date:</b></div>
         <div class="col-md-9"><a href="{{url_for('main.tasting', tasting_id=review.tasting.id)}}" alt="View tasting">{{review.tasting.date.strftime('%d/%m/%Y')}}</a></div>
       </div>

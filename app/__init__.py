@@ -21,6 +21,7 @@ moment = Moment()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
+    app.json_encoder = MaltgeezersJSONEncoder
     app.config.from_object(config_class)
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static/uploads')
@@ -82,3 +83,4 @@ def create_app(config_class=Config):
 
 from app.models import User
 from app.main.forms import MaltgeezersUserManager
+from app.main.routes import MaltgeezersJSONEncoder

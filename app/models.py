@@ -9,13 +9,12 @@ import jwt
 from app import db
 import base64
 import os
+from app.utils import mean
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
-
-
 
 class PaginatedAPIMixin(object):
     @staticmethod
@@ -44,6 +43,13 @@ class PaginatedAPIMixin(object):
         resources = query.all()
         data = {
             'items': [item.to_dict() for item in resources],
+        }
+        return data
+    @staticmethod
+    def to_chart_dict_all(query, endpoint, **kwargs):
+        resources = query.all()
+        data = {
+            'items': [item.to_chart_data() for item in resources],
         }
         return data
 
@@ -314,6 +320,14 @@ class Brand(PaginatedAPIMixin, db.Model):
     def __repr__(self):
         return '<Brand {}>'.format(self.name)
 
+class Score(db.Model):
+    __tablename__ = 'score'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    review_id = db.Column(db.Integer, db.ForeignKey('review.id'))
+    score = db.Column(db.Numeric(10,1))
+    notes = db.Column(db.String(500))
+
 class Review(PaginatedAPIMixin, db.Model):
     __tablename__ = 'review'
     id = db.Column(db.Integer, primary_key=True)
@@ -330,6 +344,28 @@ class Review(PaginatedAPIMixin, db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     brand_id = db.Column(db.Integer,db.ForeignKey('brand.id'))
     tasting_id = db.Column(db.Integer,db.ForeignKey('tasting.id'))
+    scores = db.relationship('Score', backref='review', lazy='dynamic')
+
+    def avg(self):
+        if self.scores is not None:
+            s = [item.score for item in self.scores]
+            if len(s):
+                return mean(s)
+        return self.avg_rating
+
+    def min(self):
+        if self.scores is not None:
+            s = [item.score for item in self.scores]
+            if len(s):
+                return min(s)
+        return self.min_rating
+
+    def max(self):
+        if self.scores is not None:
+                s = [item.score for item in self.scores]
+                if len(s):
+                    return max(s)
+        return self.max_rating
 
     def title(self):
         title = ""
@@ -357,9 +393,9 @@ class Review(PaginatedAPIMixin, db.Model):
             'age': self.age,
             'notes': self.notes,
             'tasting_notes': self.tasting_note,
-            'max_rating': str(self.max_rating),
-            'avg_rating': str(self.avg_rating),
-            'min_rating': str(self.min_rating),
+            'max_rating': str(self.max()),
+            'avg_rating': str(self.avg()),
+            'min_rating': str(self.min()),
             'img_url': self.img_url(),
             '_links': {
                 'self': url_for('api.get_review', id=self.id),
@@ -373,6 +409,20 @@ class Review(PaginatedAPIMixin, db.Model):
             }
         if self.brand is not None:
             data['distillery'] = 'Unknown' if self.brand.name is None else self.brand.name
+        return data
+
+    def to_chart_data(self):
+
+        data = {
+            'name': self.name,
+            'type':'box',
+             'marker': {
+                'color': 'rgb(8,81,156)'
+              },
+        }
+        if self.scores is not None:
+            #data['y'] = list(self.scores.values())
+            data['y'] = [item.score for item in self.scores]
         return data
 
     def __repr__(self):

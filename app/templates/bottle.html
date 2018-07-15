@@ -3,7 +3,7 @@
 {% block content %}
   <header>
     <h1 class="text-center">Details for {{review.title() }}
-      </h2>
+    </h1>
       <ul class="social float-right">
       <li>
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url="{{ url_for('main.review', review_id=review.id, _external=True) }}" data-hashtags="whisky {%if review.brand is not none %},{{review.brand.name}}{%endif%}" data-text"Checkout the Maltgeezers review for {{review.title}}" data-via="bvmaltgeezers" data-hashtags="whisky #test" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -20,5 +20,35 @@
           {% with%}
             {% include '_review_inline.html'  %}
           {% endwith %}
+  </div>
+  <div class="container">
+    <h1 class="text-center">Scores
+    </h1>
+    {% if call_or_get(current_user.is_authenticated) %}
+      {% if call_or_get(current_user.has_role('reviewer')) %}
+      <a class="float-right btn btn-primary" href="#" data-toggle="modal" data-target="#modalScore"  data-id="{{review.id}}" value="Expand review" >Add Score</a>
+        {% endif %}
+    {% endif %}
+          {% with%}
+            {% include '_add_score_modal.html'  %}
+          {% endwith %}
+    <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Person</th>
+        <th scope="col">Score</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for score in review.scores %}
+      <tr>
+        <td>{{score.user_id}}</td>
+        <td>{{score.score}}</td>
+        <td>{{score.notes|safe}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
   </div>
 {% endblock %}

@@ -5,7 +5,7 @@
           </picture>
           <div class="card-content">
             <h2>{{ review.brand.name }}</h2>
-            <p>{% if review.age != 0 and review.age is not none %}{{ review.age }}yr Old {% endif %}{{ review.name }}<span class="float-right">{{ review.avg_rating }}/10</span></p>
+            <p>{% if review.age != 0 and review.age is not none %}{{ review.age }}yr Old {% endif %}{{ review.name }}<span class="float-right">{{ review.avg() }}/10</span></p>
           </div><!-- .card-content -->
       </a>
   </article><!-- .card -->
