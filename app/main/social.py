@@ -36,9 +36,9 @@ def fb_post():
   flash("posted")
   return redirect(url_for('main.tastings'))
 
-@bp.route('/post/twitter/<int:tasting_id>', methods=['GET', 'POST'])
+@bp.route('/twitter/tasting/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')
-def twitter_post(tasting_id):
+def tweet_tasting(tasting_id):
     twitter = Twython(
         current_app.config['TWITTER_CONSUMER_KEY'],
         current_app.config['TWITTER_CONSUMER_SECRET'],
@@ -51,7 +51,23 @@ def twitter_post(tasting_id):
         if review.brand is not None:
             distilleries = distilleries + "#" + review.brand.name.replace(" ","") + " "
 
-    message = "Checkout our latest tasting at " + url_for('main.tasting', tasting_id=tasting_id,  _external=True) + " " + distilleries
+    message = "Checkout our latest tasting " + distilleries + " " + url_for('main.tasting', tasting_id=tasting_id,  _external=True)
     twitter.update_status(status=message)
     flash("Tweeted: {}".format(message))
-    return redirect(url_for('main.tastings'))
+    return redirect(url_for('main.tasting', tasting_id=tasting_id))
+
+@bp.route('/twitter/review/<int:review_id>', methods=['GET', 'POST'])
+@roles_required('reviewer')
+def tweet_review(review_id):
+    twitter = Twython(
+        current_app.config['TWITTER_CONSUMER_KEY'],
+        current_app.config['TWITTER_CONSUMER_SECRET'],
+        current_app.config['TWITTER_ACCESS_TOKEN'],
+        current_app.config['TWITTER_ACCESS_TOKEN_SECRET']
+    )
+    review = Review.query.filter_by(id=review_id).first()
+
+    message = "Checkout our " + str(review.avg_rating) + "/10 review of " + review.title + " " + url_for('main.review', review_id=review_id,  _external=True)
+    twitter.update_status(status=message)
+    flash("Tweeted: {}".format(message))
+    return redirect(url_for('main.review',review_id=review_id))

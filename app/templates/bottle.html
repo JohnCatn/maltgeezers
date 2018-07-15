@@ -4,11 +4,19 @@
   <header>
     <h1 class="text-center">Details for {{review.name }}
       </h2>
-      <div class="float-right  mr-4"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button " data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
-      <div class="fb-share-button float-right mr-4" data-href="{{ url_for('main.review', review_id=review.id, _external=True) }}" data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
-
+      <ul class="social float-right">
+      <li>
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url="{{ url_for('main.review', review_id=review.id, _external=True) }}" data-hashtags="whisky {%if review.brand is not none %},{{review.brand.name}}{%endif%}" data-text"Checkout the Maltgeezers review for {{review.title}}" data-via="bvmaltgeezers" data-hashtags="whisky #test" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </li>
+      <li><div class="fb-share-button" data-href="{{ url_for('main.review', review_id=review.id, _external=True) }}"  data-layout="button" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div></li>
+      <ul>
   </header>
   <div class="container">
+    {% if call_or_get(current_user.is_authenticated) %}
+      {% if call_or_get(current_user.has_role('reviewer')) %}
+      <a class="btn btn-primary float-right mr-4" role="button" href="{{ url_for('main.tweet_review', review_id=review.id) }}">Publish On Twitter</a>
+        {% endif %}
+    {% endif %}
           {% with%}
             {% include '_review_inline.html'  %}
           {% endwith %}

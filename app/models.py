@@ -333,9 +333,19 @@ class Review(PaginatedAPIMixin, db.Model):
     brand_id = db.Column(db.Integer,db.ForeignKey('brand.id'))
     tasting_id = db.Column(db.Integer,db.ForeignKey('tasting.id'))
 
+    def title(self):
+        title = ""
+        if self.brand.name is not None:
+            title = title + self.brand.name + " "
+        if self.age != 0:
+            title = title + str(self.age) + "yr old "
+        title = title + self.name
+        return title
+
     def img_url(self):
         filename = 'img/mystery_bottle.jpg' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
         return url_for('static',filename=filename)
+
     def img_url_external(self):
         filename = 'img/mystery_bottle.jpg' if self.img_name is None else'uploads/' + str(self.id) + '/' + self.img_name
         return url_for('static',filename=filename, _external=True)
@@ -344,6 +354,7 @@ class Review(PaginatedAPIMixin, db.Model):
 
         data = {
             'id': self.id,
+            'title': self.title(),
             'name': self.name,
             'age': self.age,
             'notes': self.notes,
@@ -367,4 +378,4 @@ class Review(PaginatedAPIMixin, db.Model):
         return data
 
     def __repr__(self):
-        return '<Review {}>'.format(self.body)
+        return '<Review {}>'.format(self.name)

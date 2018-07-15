@@ -59,7 +59,7 @@ window.cookieconsent.initialise({
 <meta property="og:url" content="{{ request.url }}"/>
 <meta property="og:image" content="{% if image_url is none %}{{url_for('static', filename='img/maltgeezers.png',_external=True)}}{%else%}{{image_url}}{%endif%}"/>
 <meta property="og:site_name" content="Maltgeezers"/>
-<meta property="og:description" content="{{ description }}"/>
+<meta property="og:description" content="{{ description|safe }}"/>
 <meta name="twitter:url" content="{{ request.url }}"/>
 <meta name="twitter:title" content="{{ title }}"/>
 <meta name="twitter:description" content="{{ description }}"/>
