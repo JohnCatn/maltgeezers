@@ -8,9 +8,9 @@ from app.models import User, Review, Brand, Tasting,Club, Score
 from app.main import bp
 from werkzeug import secure_filename
 import pathlib
-
 import decimal
 import flask.json
+from app.utils import rotateImage
 
 class MaltgeezersJSONEncoder(flask.json.JSONEncoder):
 
@@ -60,6 +60,7 @@ def add(tasting_id):
 
         pathlib.Path(current_app.config['UPLOAD_FOLDER'] + '/' + str(review.id)).mkdir(parents=True, exist_ok=True)
         form.image.data.save(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/' + filename)
+        rotateImage(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/',filename)
         flash('Your review is now live!')
         return redirect(url_for('main.tasting',tasting_id=form.tasting_id.data))
     return render_template('add_review.html', title='Add Review', form=form,)
@@ -97,6 +98,8 @@ def edit_review(review_id):
                 pathlib.Path(current_app.config['UPLOAD_FOLDER'] + '/' + str(review.id)).mkdir(parents=True, exist_ok=True)
                 form.image.data.save(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/' + filename)
                 review.img_name = filename
+                rotateImage(current_app.config['UPLOAD_FOLDER']  + '/' + str(review.id) + '/',filename)
+
             db.session.commit()
             flash('Your changes have been saved.' )
             return redirect(url_for('main.tasting',tasting_id=review.tasting.id))

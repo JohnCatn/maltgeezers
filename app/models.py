@@ -369,7 +369,7 @@ class Review(PaginatedAPIMixin, db.Model):
 
     def title(self):
         title = ""
-        if self.brand.name is not None:
+        if self.brand is not None:
             title = title + self.brand.name + " "
         if self.age != 0:
             title = title + str(self.age) + "yr old "
