@@ -22,7 +22,7 @@ def rotateImage(path,fileName):
         elif exif[orientation] == 8 :
             image=image.transpose(Image.ROTATE_90)
 
-        #image.thumbnail((250 , 250), Image.ANTIALIAS)
+        image.thumbnail((450 , 600), Image.ANTIALIAS)
         image.save(os.path.join(path,fileName))
 
     except:
