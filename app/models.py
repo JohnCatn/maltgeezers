@@ -39,14 +39,15 @@ class PaginatedAPIMixin(object):
         }
         return data
     @staticmethod
-    def to_collection_dict_all(query, endpoint, **kwargs):
+    def to_collection_dict_all(query, **kwargs):
         resources = query.all()
         data = {
             'items': [item.to_dict() for item in resources],
         }
         return data
+
     @staticmethod
-    def to_chart_dict_all(query, endpoint, **kwargs):
+    def to_chart_dict_all(query, **kwargs):
         resources = query.all()
         data = {
             'items': [item.to_chart_data() for item in resources],

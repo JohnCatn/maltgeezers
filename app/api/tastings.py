@@ -10,7 +10,7 @@ def get_tasting(id):
     return jsonify(Tasting.query.get_or_404(id).to_dict())
 
 @bp.route('/tastings', methods=['GET'])
-def tastings():
+def get_tastings():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
     data = Review.to_collection_dict(Tasting.query, page, per_page, 'api.get_tastings')
@@ -18,7 +18,5 @@ def tastings():
 
 @bp.route('/tasting/<int:tasting_id>/reviews_chart', methods=['GET'])
 def get_tasting_chart(tasting_id):
-    page = request.args.get('page', 1, type=int)
-    per_page = min(request.args.get('per_page', 10, type=int), 100)
-    data = Review.to_chart_dict_all(Review.query.filter_by(tasting_id=tasting_id), 'api.get_tasting_chart')
+    data = Review.to_chart_dict_all(Review.query.filter_by(tasting_id=tasting_id))
     return jsonify(data)
