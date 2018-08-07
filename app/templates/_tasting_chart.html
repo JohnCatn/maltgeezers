@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+
+<header>
+  <!-- Plotly chart will be drawn inside this DIV -->
+  <div id="myDiv"></div>
+  <script>
+  /* JAVASCRIPT CODE GOES HERE */
+  var url='{{url_for('api.get_tasting_chart',tasting_id=tasting.id)}}';
+
+d3.json(url, function(error, data) {
+  if (error) return console.warn(error);
+  layout = {
+    barmode: 'block',
+    title: 'Score summary',
+    yaxis: {range: [0, 10]},
+    margin: {
+        l: 40,
+        r: 30,
+        b: 80,
+        t: 100
+    },
+    paper_bgcolor: 'rgb(243, 243, 243)',
+    plot_bgcolor: 'rgb(243, 243, 243)',
+    showlegend: true
+};
+
+ Plotly.newPlot('myDiv', data.items, layout);
+});
+
+var layout = {
+  title: 'Box Plot Styling Mean and Standard Deviation'
+};
+
+
+</script>
+
+{% endblock %}

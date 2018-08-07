@@ -67,6 +67,23 @@ class Tasting(db.Model):
     def __repr__(self):
         return '<Tasting {}>'.format(self.id)
 
+    def to_dict(self):
+
+        data = {
+            'id': self.id,
+            'date': self.date,
+            'location': self.location,
+            '_links': {
+                'self': url_for('api.get_review', id=self.id),
+                'review': url_for('main.review', review_id=self.id,_external=True)
+            }
+        }
+        if self.reviews is not None:
+            data['review'] = {
+                'items': [item.to_chart_data() for item in self.reviews]
+            }
+        return data
+
 # Define the Role data-model
 class Club(db.Model):
     __tablename__ = 'club'

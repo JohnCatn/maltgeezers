@@ -12,6 +12,7 @@ import decimal
 import flask.json
 from app.utils import rotateImage
 from sqlalchemy import func
+from decimal import Decimal
 
 class MaltgeezersJSONEncoder(flask.json.JSONEncoder):
 
@@ -19,7 +20,7 @@ class MaltgeezersJSONEncoder(flask.json.JSONEncoder):
         if isinstance(obj, decimal.Decimal):
             # Convert decimal instances to strings.
             return str(obj)
-        return super(MyJSONEncoder, self).default(obj)
+        return super(MaltgeezersJSONEncoder, self).default(obj)
 
 @bp.route('/add/dummy/<int:tasting_id>', methods=['GET', 'POST'])
 @roles_required('reviewer')    # Use of @roles_required decorator
@@ -140,8 +141,10 @@ def review(review_id):
     form.review_id.data = review.id
     if form.validate_on_submit:
         if request.method == 'POST':
-            score = Score(review_id=review.id, score=form.score.data, notes=form.notes.data)
-            db.session.add(score)
+            scores = form.score.data.split(",")
+            for s in scores:
+                score = Score(review_id=review.id, score=Decimal(s), notes=form.notes.data)
+                db.session.add(score)
             # Update the average score
             review.avg_rating = review.avg()
             db.session.commit()

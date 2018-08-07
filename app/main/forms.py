@@ -62,6 +62,6 @@ class TastingForm(FlaskForm):
 
 class ScoreForm(FlaskForm):
     review_id = HiddenField('Review',id="review_id")
-    score = DecimalField('Score', validators=[DataRequired(),NumberRange(0,10)])
+    score = StringField('Score', validators=[DataRequired()])
     notes = StringField('Note')
     submit = SubmitField('Add')
