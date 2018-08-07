@@ -202,7 +202,7 @@ def unattend(tasting_id):
 def index():
     page = request.args.get('page', 1, type=int)
     current_time = datetime.utcnow()
-    reviews = Review.query.order_by(Review.avg_rating.desc()).paginate(
+    reviews = Review.query.filter(Review.tasting.date < current_time, Review.avg_rating != None).order_by(Review.avg_rating.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     latest_tasting = Tasting.query.filter(Tasting.date < current_time, Tasting.reviews != None).order_by(Tasting.date.desc()).limit(1)
     return render_template("index.html", title='Home', reviews=reviews.items, tasting=latest_tasting[0])
