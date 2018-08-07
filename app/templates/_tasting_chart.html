@@ -1,12 +1,8 @@
-{% extends "base.html" %}
-
-{% block content %}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
 
-<header>
   <!-- Plotly chart will be drawn inside this DIV -->
-  <div id="myDiv"></div>
+  <div id="chartDiv"></div>
   <script>
   /* JAVASCRIPT CODE GOES HERE */
   var url='{{url_for('api.get_tasting_chart',tasting_id=tasting.id)}}';
@@ -28,14 +24,12 @@ d3.json(url, function(error, data) {
     showlegend: true
 };
 
- Plotly.newPlot('myDiv', data.items, layout);
+ Plotly.newPlot('chartDiv', data.items, layout);
 });
 
 var layout = {
-  title: 'Box Plot Styling Mean and Standard Deviation'
+  title: 'Tasting Reviews Mean and Standard Deviation'
 };
 
 
 </script>
-
-{% endblock %}
