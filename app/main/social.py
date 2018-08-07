@@ -67,7 +67,7 @@ def tweet_review(review_id):
     )
     review = Review.query.filter_by(id=review_id).first()
 
-    message = "Checkout our " + str(review.avg_rating) + "/10 review of " + review.title() + " " + url_for('main.review', review_id=review_id,  _external=True)
+    message = "Checkout our " + str(review.avg()) + "/10 review of " + review.title() + " " + url_for('main.review', review_id=review_id,  _external=True)
     twitter.update_status(status=message)
     flash("Tweeted: {}".format(message))
     return redirect(url_for('main.review',review_id=review_id))
