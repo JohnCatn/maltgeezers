@@ -23,7 +23,7 @@ Flask-Scss==0.5
 Flask-SQLAlchemy==2.3.2
 Flask-User==1.0.1.5
 Flask-WTF==0.14.2
-httpie==0.9.9
+httpie==1.0.3
 idna==2.6
 image==1.5.24
 itsdangerous==0.24
